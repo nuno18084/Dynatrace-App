@@ -1,35 +1,68 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import axios from "axios";
+import { saveAs } from "file-saver";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://127.0.0.1:5000/api/data", {
+          timeout: 10000,
+        });
+
+        setData(res.data);
+      } catch (err) {
+        console.error("Erro ao carregar dados:", err);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const downloadCSV = () => {
+    const headers = Object.keys(data[0] || {});
+    const csvRows = [headers, ...data.map((row) => headers.map((h) => row[h]))];
+
+    const csvContent = csvRows.map((e) => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "mock_entities.csv");
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="container">
+      <h1 className="title">Mock Entities</h1>
+      <div className="table-container">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Entity ID</th>
+              <th>Display Name</th>
+              <th>Type</th>
+              <th>First Seen</th>
+              <th>Last Seen</th>
+              <th>Tags</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index}>
+                <td>{item.EntityId}</td>
+                <td>{item.DisplayName}</td>
+                <td>{item.Type}</td>
+                <td>{item.FirstSeen}</td>
+                <td>{item.LastSeen}</td>
+                <td>{item.Tags}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <button onClick={downloadCSV} className="download-btn">
+        Download CSV
+      </button>
+    </div>
+  );
 }
-
-export default App
+export default App;

@@ -1,42 +1,69 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/* Estilos gerais */
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #333; /* Fundo cinzento escuro */
+  color: white; /* Texto branco em toda a página */
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 20px;
+  width: 100%;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: white; /* Título branco */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.table-container {
+  width: 100%;
+  max-width: 1000px;
+  overflow-x: auto;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #333; /* Fundo escuro na tabela */
 }
 
-.card {
-  padding: 2em;
+.data-table th,
+.data-table td {
+  border: 1px solid #444; /* Bordas mais suaves */
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
 }
 
-.read-the-docs {
-  color: #888;
+.data-table thead {
+  background-color: #444; /* Cor mais escura para o cabeçalho */
+}
+
+.data-table tbody tr:hover {
+  background-color: #555; /* Efeito hover mais claro */
+}
+
+.download-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.download-btn:hover {
+  background-color: #0056b3;
 }
