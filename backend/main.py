@@ -15,8 +15,9 @@ def get_mock_data():
             "LastSeen": 1705000000000 + i * 1000000,
             "Tags": ", ".join([f"tag{i % 5}", f"group{i % 3}"])
         }
-        for i in range(1, 11)
-    ]
+        for i in range(1, 14)  # Certifique-se de que o loop termina corretamente
+    ]  # Certifique-se de que este colchete está fechado corretamente
+
     return jsonify(mock_entities)
 
 if __name__ == '__main__':

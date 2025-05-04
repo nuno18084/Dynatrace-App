@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import Navbar from "./Navbar";
 
 function App() {
   const [data, setData] = useState([]);
@@ -31,38 +32,41 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <h1 className="title">Mock Entities</h1>
-      <div className="table-container">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Entity ID</th>
-              <th>Display Name</th>
-              <th>Type</th>
-              <th>First Seen</th>
-              <th>Last Seen</th>
-              <th>Tags</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td>{item.EntityId}</td>
-                <td>{item.DisplayName}</td>
-                <td>{item.Type}</td>
-                <td>{item.FirstSeen}</td>
-                <td>{item.LastSeen}</td>
-                <td>{item.Tags}</td>
+    <>
+      <Navbar />
+      <div className="container">
+        <h1 className="title">Dynatrace Entities</h1>
+        <div className="table-container">
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Entity ID</th>
+                <th>Display Name</th>
+                <th>Type</th>
+                <th>First Seen</th>
+                <th>Last Seen</th>
+                <th>Tags</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.EntityId}</td>
+                  <td>{item.DisplayName}</td>
+                  <td>{item.Type}</td>
+                  <td>{item.FirstSeen}</td>
+                  <td>{item.LastSeen}</td>
+                  <td>{item.Tags}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <button onClick={downloadCSV} className="download-btn">
+          Download CSV
+        </button>
       </div>
-      <button onClick={downloadCSV} className="download-btn">
-        Download CSV
-      </button>
-    </div>
+    </>
   );
 }
 export default App;

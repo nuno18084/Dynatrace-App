@@ -1,13 +1,11 @@
 /* Estilos gerais */
 body,
 html {
-  height: 100%;
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #333; /* Fundo cinzento escuro */
   color: white; /* Texto branco em toda a página */
   justify-content: center;
-  align-items: center;
 }
 
 .container {
