@@ -1,72 +1,83 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
 import axios from "axios";
-import { saveAs } from "file-saver";
-import Navbar from "./Navbar";
 
 function App() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    // Fetch data from API
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:5000/api/data", {
-          timeout: 10000,
-        });
-
-        setData(res.data);
+        const response = await axios.get("http://127.0.0.1:5000/api/data");
+        setData(response.data.entities); // Assuming response contains entities
+        setLoading(false);
       } catch (err) {
-        console.error("Erro ao carregar dados:", err);
+        setError("Erro ao carregar dados", err);
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  const downloadCSV = () => {
-    const headers = Object.keys(data[0] || {});
-    const csvRows = [headers, ...data.map((row) => headers.map((h) => row[h]))];
-
-    const csvContent = csvRows.map((e) => e.join(",")).join("\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    saveAs(blob, "mock_entities.csv");
-  };
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
-    <>
-      <Navbar />
-      <div className="container">
-        <h1 className="title">Dynatrace Entities</h1>
-        <div className="table-container">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Entity ID</th>
-                <th>Display Name</th>
-                <th>Type</th>
-                <th>First Seen</th>
-                <th>Last Seen</th>
-                <th>Tags</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  <td>{item.EntityId}</td>
-                  <td>{item.DisplayName}</td>
-                  <td>{item.Type}</td>
-                  <td>{item.FirstSeen}</td>
-                  <td>{item.LastSeen}</td>
-                  <td>{item.Tags}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <button onClick={downloadCSV} className="download-btn">
-          Download CSV
-        </button>
-      </div>
-    </>
+    <div>
+      <h1>Mock Data</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Display Name</th>
+            <th>Entity ID</th>
+            <th>First Seen</th>
+            <th>From Relationships</th>
+            <th>Last Seen</th>
+            <th>Properties</th>
+            <th>Tags</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td>{item.displayName}</td>
+              <td>{item.entityId}</td>
+              <td>{new Date(item.firstSeenTimestamp).toLocaleString()}</td>
+              <td>
+                {item.fromRelationships &&
+                  Object.keys(item.fromRelationships).map((key) => (
+                    <div key={key}>
+                      {key}: {JSON.stringify(item.fromRelationships[key])}
+                    </div>
+                  ))}
+              </td>
+              <td>{new Date(item.lastSeenTimestamp).toLocaleString()}</td>
+              <td>
+                {item.properties &&
+                  Object.keys(item.properties).map((key) => (
+                    <div key={key}>
+                      {key}: {JSON.stringify(item.properties[key])}
+                    </div>
+                  ))}
+              </td>
+              <td>
+                {item.tags &&
+                  item.tags.map((tag, i) => (
+                    <div key={i}>
+                      {tag.key}: {tag.value}
+                    </div>
+                  ))}
+              </td>
+              <td>{item.type}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
+
 export default App;
