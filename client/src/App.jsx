@@ -31,11 +31,19 @@ function App() {
   }, []);
 
   const handleColumnSelect = (column) => {
-    setSelectedColumns((prev) =>
-      prev.includes(column)
-        ? prev.filter((col) => col !== column)
-        : [...prev, column]
-    );
+    setSelectedColumns((prev) => {
+      // Se a coluna já está selecionada, remove-a, mantendo a ordem original
+      if (prev.includes(column)) {
+        return prev.filter((col) => col !== column);
+      }
+      // Caso contrário, insere a coluna na posição original
+      else {
+        const columnIndex = headers.indexOf(column);
+        const newSelectedColumns = [...prev];
+        newSelectedColumns.splice(columnIndex, 0, column); // Insere na posição original
+        return newSelectedColumns;
+      }
+    });
   };
 
   const convertToCSV = (data) => {
@@ -83,10 +91,6 @@ function App() {
           ))}
         </div>
       </div>
-
-      <button className="download-btn" onClick={downloadCSV}>
-        Download CSV
-      </button>
 
       <div className="table-container">
         <table>
@@ -159,6 +163,10 @@ function App() {
           </tbody>
         </table>
       </div>
+
+      <button className="download-btn" onClick={downloadCSV}>
+        Download CSV
+      </button>
     </div>
   );
 }
