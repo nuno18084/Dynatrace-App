@@ -1,87 +1,96 @@
-/* Estilos para a Navbar */
-.navbar {
-  background-color: #333; /* Tema escuro */
-  padding: 10px;
-  width: 100%;
-  top: 0 !important;
+.sidebar {
+  position: fixed;
+  top: 0;
   left: 0;
-  z-index: 1000;
-  margin-bottom: 20px;
-}
-
-.navbar-container {
+  height: 100vh;
+  width: 250px;
+  background-color: #1c1c1c;
+  color: #e0e0e0;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%; /* Garante que a navbar ocupe 100% da largura */
-}
-
-.navbar-logo .logo-img {
-  width: 120px; /* Ajusta o tamanho do logo */
-  height: auto;
-}
-
-.navbar-menu {
-  display: flex;
-  gap: 20px;
-}
-
-.navbar-link {
-  text-decoration: none;
-  color: white;
-  font-size: 1.2rem;
-  transition: color 0.3s;
-}
-
-.navbar-link:hover {
-  color: #007bff; /* Cor de destaque ao passar o mouse */
-}
-
-/* Estilos do hamburger menu */
-.navbar-toggle {
-  display: none;
   flex-direction: column;
+  transition: width 0.3s ease;
+  z-index: 1000;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar.collapsed {
+  width: 65px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.logo-img {
+  height: 50px;
+  width: 90px;
+  margin-left: -10px;
+  margin-top: 5px;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .logo-img {
+  display: none;
+  opacity: 0;
+}
+
+.collapse-btn {
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 1.5rem;
   cursor: pointer;
-  gap: 5px;
+  padding: 8px;
+  margin-top: 15px;
 }
 
-.navbar-toggle .bar {
-  width: 25px;
-  height: 3px;
-  background-color: white;
-  border-radius: 5px;
+/* Remover o outline em todos os estados de foco e clique */
+.collapse-btn:focus,
+.collapse-btn:active {
+  outline: none;
+  border: none;
 }
 
-/* Responsividade */
-@media screen and (max-width: 900px) {
-  .navbar-menu {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    background-color: #333;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    padding: 10px;
-    box-sizing: border-box;
-  }
+.collapse-btn:hover {
+  background-color: #029e7a;
+  color: #ffffff; /* <-- texto branco ao passar o rato */
+}
 
-  .navbar-menu.active {
-    display: flex;
-  }
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
 
-  .navbar-toggle {
-    display: flex;
-  }
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #e0e0e0;
+  text-decoration: none;
+  transition: background 0.2s;
+}
 
-  .navbar-link {
-    padding: 10px;
-    text-align: center;
-    width: 100%;
-    font-size: 1.5rem;
-  }
+.sidebar-link:hover {
+  background-color: #029e7a;
+  color: #ffffff; /* <-- texto branco ao passar o rato */
+}
 
-  .navbar-link:hover {
-    background-color: #444;
-  }
+.icon {
+  font-size: 1.2rem;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.link-text {
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .link-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
 }

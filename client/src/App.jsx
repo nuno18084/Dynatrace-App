@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./App.css"; // Importa o CSS
+import "./App.css";
+import Navbar from "./Navbar";
 
 function App() {
   const [data, setData] = useState([]);
@@ -73,101 +74,104 @@ function App() {
   if (error) return <div className="error">{error}</div>;
 
   return (
-    <div className="app">
-      <h1 className="title">Dynatrace Data</h1>
+    <>
+      <div className="app">
+        <Navbar />
+        <h1 className="title">Dynatrace Data</h1>
 
-      <div className="column-selector">
-        <h2>Select Columns:</h2>
-        <div className="checkbox-grid">
-          {headers.map((header) => (
-            <div key={header} className="checkbox-item">
-              <input
-                type="checkbox"
-                checked={selectedColumns.includes(header)}
-                onChange={() => handleColumnSelect(header)}
-              />
-              <label>{header}</label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="table-container">
-        <table>
-          <thead>
-            <tr>
-              {selectedColumns.map((col) => (
-                <th key={col}>{col}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item, index) => (
-              <tr key={index}>
-                {selectedColumns.map((col) => {
-                  let value = item[col];
-
-                  if (
-                    col === "firstSeenTimestamp" ||
-                    col === "lastSeenTimestamp"
-                  ) {
-                    value = new Date(value).toLocaleString();
-                  }
-
-                  if (col === "fromRelationships" && value) {
-                    return (
-                      <td key={col}>
-                        {Object.keys(value).map((k) => (
-                          <div key={k}>
-                            {k}: {JSON.stringify(value[k])}
-                          </div>
-                        ))}
-                      </td>
-                    );
-                  }
-
-                  if (col === "properties" && value) {
-                    return (
-                      <td key={col}>
-                        {Object.keys(value).map((k) => (
-                          <div key={k}>
-                            {k}: {JSON.stringify(value[k])}
-                          </div>
-                        ))}
-                      </td>
-                    );
-                  }
-
-                  if (col === "tags" && Array.isArray(value)) {
-                    return (
-                      <td key={col}>
-                        {value.map((tag, i) => (
-                          <div key={i}>
-                            {tag.key}: {tag.value}
-                          </div>
-                        ))}
-                      </td>
-                    );
-                  }
-
-                  return (
-                    <td key={col}>
-                      {typeof value === "object"
-                        ? JSON.stringify(value)
-                        : value}
-                    </td>
-                  );
-                })}
-              </tr>
+        <div className="column-selector">
+          <h2>Select Columns:</h2>
+          <div className="checkbox-grid">
+            {headers.map((header) => (
+              <div key={header} className="checkbox-item">
+                <input
+                  type="checkbox"
+                  checked={selectedColumns.includes(header)}
+                  onChange={() => handleColumnSelect(header)}
+                />
+                <label>{header}</label>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </div>
+        </div>
 
-      <button className="download-btn" onClick={downloadCSV}>
-        Download CSV
-      </button>
-    </div>
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                {selectedColumns.map((col) => (
+                  <th key={col}>{col}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  {selectedColumns.map((col) => {
+                    let value = item[col];
+
+                    if (
+                      col === "firstSeenTimestamp" ||
+                      col === "lastSeenTimestamp"
+                    ) {
+                      value = new Date(value).toLocaleString();
+                    }
+
+                    if (col === "fromRelationships" && value) {
+                      return (
+                        <td key={col}>
+                          {Object.keys(value).map((k) => (
+                            <div key={k}>
+                              {k}: {JSON.stringify(value[k])}
+                            </div>
+                          ))}
+                        </td>
+                      );
+                    }
+
+                    if (col === "properties" && value) {
+                      return (
+                        <td key={col}>
+                          {Object.keys(value).map((k) => (
+                            <div key={k}>
+                              {k}: {JSON.stringify(value[k])}
+                            </div>
+                          ))}
+                        </td>
+                      );
+                    }
+
+                    if (col === "tags" && Array.isArray(value)) {
+                      return (
+                        <td key={col}>
+                          {value.map((tag, i) => (
+                            <div key={i}>
+                              {tag.key}: {tag.value}
+                            </div>
+                          ))}
+                        </td>
+                      );
+                    }
+
+                    return (
+                      <td key={col}>
+                        {typeof value === "object"
+                          ? JSON.stringify(value)
+                          : value}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <button className="download-btn" onClick={downloadCSV}>
+          Download CSV
+        </button>
+      </div>
+    </>
   );
 }
 
