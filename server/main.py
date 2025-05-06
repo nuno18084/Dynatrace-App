@@ -1,11 +1,9 @@
 from flask import Flask, jsonify
-from flask_cors import CORS  # Importa o CORS
+from flask_cors import CORS
 import random
+import pandas as pd
 
-# Cria a instância da aplicação Flask
 app = Flask(__name__)
-
-# Configura o CORS para permitir qualquer origem (em desenvolvimento apenas)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route('/api/data')
@@ -37,10 +35,37 @@ def get_mock_entities():
         }
         mock_entities.append(entity)
 
+    # Flatten top-level JSON fields
+    df = pd.json_normalize(mock_entities)
+
+    # Expand tags: convert list of dicts into individual columns
+    def extract_tags(row):
+        tag_dict = {}
+        for tag in row.get("tags", []):
+            key = f"tag_{tag.get('key')}"
+            tag_dict[key] = tag.get("value")
+        return pd.Series(tag_dict)
+
+    tag_df = df.apply(extract_tags, axis=1)
+    df = pd.concat([df.drop(columns=["tags"]), tag_df], axis=1)
+
+    # Flatten list fields
+    if "fromRelationships.isRunningOn" in df.columns:
+        df["fromRelationships.isRunningOn"] = df["fromRelationships.isRunningOn"].apply(
+            lambda x: ", ".join(x) if isinstance(x, list) else x
+        )
+
+    if "properties.ipAddresses" in df.columns:
+        df["properties.ipAddresses"] = df["properties.ipAddresses"].apply(
+            lambda x: ", ".join(x) if isinstance(x, list) else x
+        )
+
+    # Optional: flatten nested dictionary fields (already mostly done by json_normalize)
+    # Convert to JSON format
     return jsonify({
-        "totalCount": len(mock_entities),
+        "totalCount": len(df),
         "pageSize": 20,
-        "entities": mock_entities
+        "entities": df.to_dict(orient="records")
     })
 
 if __name__ == '__main__':

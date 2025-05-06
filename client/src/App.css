@@ -1,67 +1,97 @@
-/* Estilos gerais */
-body,
-html {
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #333; /* Fundo cinzento escuro */
-  color: white; /* Texto branco em toda a página */
-  justify-content: center;
+  padding: 20px;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-  width: 100%;
+.app {
+  /* max-width: 1200px; */
+  margin: auto;
 }
 
 .title {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: white; /* Título branco */
-}
-
-.table-container {
-  width: 100%;
-  max-width: 1000px;
-  overflow-x: auto;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #333; /* Fundo escuro na tabela */
-}
-
-.data-table th,
-.data-table td {
-  border: 1px solid #444; /* Bordas mais suaves */
-  padding: 10px;
   text-align: center;
-  vertical-align: middle;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #90caf9;
 }
 
-.data-table thead {
-  background-color: #444; /* Cor mais escura para o cabeçalho */
+.column-selector h2 {
+  margin-bottom: 10px;
+  color: #bb86fc;
 }
 
-.data-table tbody tr:hover {
-  background-color: #555; /* Efeito hover mais claro */
+.checkbox-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.checkbox-item {
+  background-color: #1e1e1e;
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-item label {
+  margin-left: 6px;
 }
 
 .download-btn {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+  background-color: #03dac6;
+  color: #000;
+  padding: 10px 18px;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
-  margin-top: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 .download-btn:hover {
-  background-color: #0056b3;
+  background-color: #018786;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1f1f1f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th,
+td {
+  border: 1px solid #333;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+
+tr:hover {
+  background-color: #3a3a3a;
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 50px;
 }
