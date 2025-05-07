@@ -73,7 +73,7 @@ body {
   overflow-x: auto; /* Permite o scroll horizontal quando necessário */
   overflow-y: auto; /* Permite o scroll vertical */
   -webkit-overflow-scrolling: touch;
-  max-height: 60vh; /* Limita a altura da tabela a 60% da altura da janela */
+  max-height: 70vh; /* Limita a altura da tabela a 60% da altura da janela */
   margin-bottom: 5px; /* Reduzido para 20px */
 }
 
