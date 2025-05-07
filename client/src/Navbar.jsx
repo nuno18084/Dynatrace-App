@@ -8,13 +8,20 @@ import {
   FiMail,
   FiChevronsLeft,
   FiChevronsRight,
+  FiChevronDown,
+  FiChevronUp,
 } from "react-icons/fi";
 
 function Navbar({ headers, selectedColumns, handleColumnSelect }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+  const [showAllColumns, setShowAllColumns] = useState(false);
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed);
+  };
+
+  const toggleShowColumns = () => {
+    setShowAllColumns(!showAllColumns);
   };
 
   useEffect(() => {
@@ -35,6 +42,7 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
             {collapsed ? <FiChevronsRight /> : <FiChevronsLeft />}
           </button>
         </div>
+
         <nav className="sidebar-menu">
           <a href="/" className="sidebar-link">
             <FiHome className="icon" />
@@ -54,21 +62,31 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
           </a>
         </nav>
 
-        <div className={`column-selector ${collapsed ? "hide-columns" : ""}`}>
+        <div
+          className={`column-selector ${collapsed ? "hide-columns" : ""} ${
+            showAllColumns ? "expanded" : ""
+          }`}
+        >
           <h2 className="column-selector-title">Select Columns:</h2>
-          <div className="column-list">
-            {headers.map((header) => (
-              <label key={header} className="checkbox-item">
+          <div className="checkbox-grid">
+            {(showAllColumns ? headers : headers.slice(0, 5)).map((header) => (
+              <div key={header} className="checkbox-item">
                 <input
                   type="checkbox"
                   checked={selectedColumns.includes(header)}
                   onChange={() => handleColumnSelect(header)}
                 />
-                {header}
-              </label>
+                <label>{header}</label>
+              </div>
             ))}
           </div>
         </div>
+
+        {headers.length > 5 && !collapsed && (
+          <button className="toggle-columns-btn" onClick={toggleShowColumns}>
+            {showAllColumns ? <FiChevronUp /> : <FiChevronDown />}
+          </button>
+        )}
       </div>
     </div>
   );

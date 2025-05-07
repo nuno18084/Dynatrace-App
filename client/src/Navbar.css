@@ -47,7 +47,6 @@
   margin-top: 15px;
 }
 
-/* Remover o outline em todos os estados de foco e clique */
 .collapse-btn:focus,
 .collapse-btn:active {
   outline: none;
@@ -56,7 +55,7 @@
 
 .collapse-btn:hover {
   background-color: #029e7a;
-  color: #ffffff; /* <-- texto branco ao passar o rato */
+  color: #ffffff;
 }
 
 .sidebar-menu {
@@ -76,7 +75,7 @@
 
 .sidebar-link:hover {
   background-color: #029e7a;
-  color: #ffffff; /* <-- texto branco ao passar o rato */
+  color: #ffffff;
 }
 
 .icon {
@@ -97,14 +96,40 @@
 
 .column-selector {
   padding: 16px;
-  overflow-y: auto;
+  overflow-y: hidden;
   flex-grow: 1;
+  max-height: 210px;
+  position: relative;
+  padding-right: 10px;
+  padding-bottom: 30px; /* espaço para a seta */
 }
 
 .column-selector-title {
   font-size: 1rem;
   margin-bottom: 8px;
   color: #e0e0e0;
+}
+
+.column-selector.expanded {
+  max-height: none;
+  overflow-y: auto;
+}
+
+.column-selector::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to bottom, transparent, #1c1c1c);
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1;
+}
+
+.column-selector.expanded::after {
+  opacity: 0;
 }
 
 .column-list {
@@ -134,7 +159,35 @@
   height: 100%;
 }
 
-/* Desativa scroll da app quando navbar expandida */
 body.navbar-open {
   overflow-y: hidden;
+}
+
+.checkbox-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.toggle-columns-btn {
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin: 10px auto 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.toggle-columns-btn:active,
+.toggle-columns-btn:focus {
+  outline: none;
+}
+
+.toggle-columns-btn:hover {
+  color: #ffffff;
+  transform: scale(1.1);
 }
