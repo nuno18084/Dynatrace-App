@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   height: 100vh;
-  width: 250px;
+  width: 280px;
   background-color: #1c1c1c;
   color: #e0e0e0;
   display: flex;
@@ -93,4 +93,48 @@
   opacity: 0;
   width: 0;
   overflow: hidden;
+}
+
+.column-selector {
+  padding: 16px;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.column-selector-title {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #e0e0e0;
+}
+
+.column-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.checkbox-item {
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  color: #e0e0e0;
+  gap: 6px;
+}
+
+.checkbox-item input {
+  accent-color: #029e7a;
+}
+
+.hide-columns {
+  display: none;
+}
+
+.sidebar-scrollable {
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* Desativa scroll da app quando navbar expandida */
+body.navbar-open {
+  overflow-y: hidden;
 }

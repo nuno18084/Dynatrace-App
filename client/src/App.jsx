@@ -76,24 +76,12 @@ function App() {
   return (
     <>
       <div className="app">
-        <Navbar />
+        <Navbar
+          headers={headers}
+          selectedColumns={selectedColumns}
+          handleColumnSelect={handleColumnSelect}
+        />
         <h1 className="title">Dynatrace Data</h1>
-
-        <div className="column-selector">
-          <h2>Select Columns:</h2>
-          <div className="checkbox-grid">
-            {headers.map((header) => (
-              <div key={header} className="checkbox-item">
-                <input
-                  type="checkbox"
-                  checked={selectedColumns.includes(header)}
-                  onChange={() => handleColumnSelect(header)}
-                />
-                <label>{header}</label>
-              </div>
-            ))}
-          </div>
-        </div>
 
         <div className="table-container">
           <table>
