@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Navbar.css";
-import Logo from "./assets/BNP_Logo.png";
+import Logo from "../../assets/BNP_Logo.png";
 import {
   FiHome,
   FiInfo,
