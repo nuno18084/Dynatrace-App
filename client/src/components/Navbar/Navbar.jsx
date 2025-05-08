@@ -3,7 +3,7 @@ import useSidebarCollapse from "../../hooks/useSidebarCollapse";
 import useShowAllColumns from "../../hooks/showAllColumns";
 import "./Navbar.css";
 import Logo from "../../assets/BNP_Logo.png";
-import Button from "../Button/Button";
+import ApplyButton from "../Button/Button";
 import {
   FiHome,
   FiInfo,
@@ -88,7 +88,7 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
           showAllColumns ? "expanded" : ""
         }`}
       >
-        <Button
+        <ApplyButton
           className="apply-btn"
           text="Apply"
           color="#029e7a"

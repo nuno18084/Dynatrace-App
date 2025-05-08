@@ -3,7 +3,7 @@ import React from "react";
 import "./Button.css";
 import "../../App.css";
 
-const DownloadButton = ({ text, color, width, height, onClick }) => {
+const Button = ({ text, color, width, height, onClick }) => {
   return (
     <button
       className="download-btn app"
@@ -19,4 +19,4 @@ const DownloadButton = ({ text, color, width, height, onClick }) => {
   );
 };
 
-export default DownloadButton;
+export default Button;
