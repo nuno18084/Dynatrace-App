@@ -1,0 +1,38 @@
+/* Contêiner da tabela com rolagem horizontal e vertical */
+.table-container {
+  width: 100%;
+  margin-top: 20px; /* Distância da seção de seleção de colunas */
+  overflow-x: auto; /* Permite o scroll horizontal quando necessário */
+  overflow-y: auto; /* Permite o scroll vertical */
+  -webkit-overflow-scrolling: touch;
+  max-height: 70vh; /* Limita a altura da tabela a 60% da altura da janela */
+  margin-bottom: 5px; /* Reduzido para 20px */
+}
+
+table {
+  width: 100%;
+  min-width: 1000px; /* Garante que a tabela ocupe mais de 100% da largura para disparar o scroll */
+  border-collapse: collapse;
+  background-color: #1f1f1f;
+  border-radius: 8px;
+}
+
+th,
+td {
+  border: 1px solid #333;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #2c2c2c;
+  color: #ffffff;
+}
+
+tr:nth-child(even) {
+  background-color: #2a2a2a;
+}
+
+tr:hover {
+  background-color: #3a3a3a;
+}
