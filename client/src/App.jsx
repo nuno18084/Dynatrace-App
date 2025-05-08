@@ -10,6 +10,7 @@ import axios from "axios";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import DataTable from "./components/DataTable/DataTable";
+import DownloadButton from "./components/Button/Button";
 
 function App() {
   const { data, setData } = useData();
@@ -64,9 +65,14 @@ function App() {
 
       <DataTable data={data} selectedColumns={selectedColumns} />
 
-      <button className="download-btn" onClick={handleDownloadCSV}>
-        Download CSV
-      </button>
+      <DownloadButton
+        text="Download CSV"
+        color="#029e7a"
+        width="1200px"
+        height="40px"
+        onClick={handleDownloadCSV}
+        marginBottom="100px"
+      />
     </div>
   );
 }

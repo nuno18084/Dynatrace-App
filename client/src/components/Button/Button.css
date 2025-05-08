@@ -1,0 +1,23 @@
+.download-btn {
+  background-color: #029e7a;
+  color: #000;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.download-btn:hover {
+  background-color: #018786;
+}
+
+.apply-btn {
+  position: fixed;
+  right: 10px; /* You can adjust the right distance from the edge */
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  z-index: 10; /* Keeps it above other content */
+}

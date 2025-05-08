@@ -101,7 +101,7 @@
   max-height: 210px;
   position: relative;
   padding-right: 10px;
-  padding-bottom: 30px; /* espaço para a seta */
+  padding-bottom: 30px;
 }
 
 .column-selector-title {

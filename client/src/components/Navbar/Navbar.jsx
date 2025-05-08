@@ -3,6 +3,7 @@ import useSidebarCollapse from "../../hooks/useSidebarCollapse";
 import useShowAllColumns from "../../hooks/showAllColumns";
 import "./Navbar.css";
 import Logo from "../../assets/BNP_Logo.png";
+import Button from "../Button/Button";
 import {
   FiHome,
   FiInfo,
@@ -81,6 +82,20 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
             {showAllColumns ? <FiChevronUp /> : <FiChevronDown />}
           </button>
         )}
+      </div>
+      <div
+        className={`column-selector ${collapsed ? "hide-columns" : ""} ${
+          showAllColumns ? "expanded" : ""
+        }`}
+      >
+        <Button
+          className="apply-btn"
+          text="Apply"
+          color="#029e7a"
+          width="200px"
+          height="40px"
+          onClick={""}
+        />
       </div>
     </div>
   );
