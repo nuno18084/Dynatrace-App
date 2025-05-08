@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import useData from "./hooks/useData";
+import useLoading from "./hooks/useLoading";
+import useError from "./hooks/useError";
+import useHeaders from "./hooks/useHeaders";
+import useSelectedColumns from "./hooks/useSelectedColumns";
 import axios from "axios";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 
 function App() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [headers, setHeaders] = useState([]);
-  const [selectedColumns, setSelectedColumns] = useState([]);
+  const { data, setData } = useData();
+  const { loading, setLoading } = useLoading();
+  const { error, setError } = useError();
+  const { headers, setHeaders } = useHeaders();
+  const { selectedColumns, setSelectedColumns } = useSelectedColumns();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,8 +33,9 @@ function App() {
         setLoading(false);
       }
     };
+
     fetchData();
-  }, []);
+  }, [setData, setLoading, setHeaders, setSelectedColumns, setError]);
 
   const handleColumnSelect = (column) => {
     setSelectedColumns((prev) => {
