@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import useData from "./hooks/useData";
 import useLoading from "./hooks/useLoading";
 import useError from "./hooks/useError";
 import useHeaders from "./hooks/useHeaders";
 import useSelectedColumns from "./hooks/useSelectedColumns";
+import { handleColumnSelect } from "./utils/handleColumnSelect";
+import { downloadCSV } from "./utils/downloadCSV";
 import axios from "axios";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
@@ -37,135 +39,104 @@ function App() {
     fetchData();
   }, [setData, setLoading, setHeaders, setSelectedColumns, setError]);
 
-  const handleColumnSelect = (column) => {
-    setSelectedColumns((prev) => {
-      // Se a coluna já está selecionada, remove-a, mantendo a ordem original
-      if (prev.includes(column)) {
-        return prev.filter((col) => col !== column);
-      }
-      // Caso contrário, insere a coluna na posição original
-      else {
-        const columnIndex = headers.indexOf(column);
-        const newSelectedColumns = [...prev];
-        newSelectedColumns.splice(columnIndex, 0, column); // Insere na posição original
-        return newSelectedColumns;
-      }
-    });
-  };
-
-  const convertToCSV = (data) => {
-    const header = selectedColumns;
-    const rows = data.map((item) =>
-      selectedColumns.map((col) => {
-        const value = item[col];
-        return typeof value === "object" ? JSON.stringify(value) : value;
-      })
-    );
-    return [header, ...rows].map((row) => row.join(",")).join("\n");
-  };
-
-  const downloadCSV = () => {
-    const csvContent = convertToCSV(data);
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "entities_data.csv";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
 
+  // Function to handle column selection
+  const handleColumnSelection = (column) => {
+    handleColumnSelect(column, selectedColumns, setSelectedColumns, headers);
+  };
+
+  // Function to download CSV
+  const handleDownloadCSV = () => {
+    downloadCSV(data, selectedColumns);
+  };
+
   return (
-    <>
-      <div className="app">
-        <Navbar
-          headers={headers}
-          selectedColumns={selectedColumns}
-          handleColumnSelect={handleColumnSelect}
-        />
-        <h1 className="title">Dynatrace Data</h1>
+    <div className="app">
+      <Navbar
+        headers={headers}
+        selectedColumns={selectedColumns}
+        handleColumnSelect={handleColumnSelection}
+      />
+      <h1 className="title">Dynatrace Data</h1>
 
-        <div className="table-container">
-          <table>
-            <thead>
-              <tr>
-                {selectedColumns.map((col) => (
-                  <th key={col}>{col}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => (
-                <tr key={index}>
-                  {selectedColumns.map((col) => {
-                    let value = item[col];
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              {selectedColumns.map((col) => (
+                <th key={col}>{col}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index}>
+                {selectedColumns.map((col) => {
+                  let value = item[col];
 
-                    if (
-                      col === "firstSeenTimestamp" ||
-                      col === "lastSeenTimestamp"
-                    ) {
-                      value = new Date(value).toLocaleString();
-                    }
+                  if (
+                    col === "firstSeenTimestamp" ||
+                    col === "lastSeenTimestamp"
+                  ) {
+                    value = new Date(value).toLocaleString();
+                  }
 
-                    if (col === "fromRelationships" && value) {
-                      return (
-                        <td key={col}>
-                          {Object.keys(value).map((k) => (
-                            <div key={k}>
-                              {k}: {JSON.stringify(value[k])}
-                            </div>
-                          ))}
-                        </td>
-                      );
-                    }
-
-                    if (col === "properties" && value) {
-                      return (
-                        <td key={col}>
-                          {Object.keys(value).map((k) => (
-                            <div key={k}>
-                              {k}: {JSON.stringify(value[k])}
-                            </div>
-                          ))}
-                        </td>
-                      );
-                    }
-
-                    if (col === "tags" && Array.isArray(value)) {
-                      return (
-                        <td key={col}>
-                          {value.map((tag, i) => (
-                            <div key={i}>
-                              {tag.key}: {tag.value}
-                            </div>
-                          ))}
-                        </td>
-                      );
-                    }
-
+                  if (col === "fromRelationships" && value) {
                     return (
                       <td key={col}>
-                        {typeof value === "object"
-                          ? JSON.stringify(value)
-                          : value}
+                        {Object.keys(value).map((k) => (
+                          <div key={k}>
+                            {k}: {JSON.stringify(value[k])}
+                          </div>
+                        ))}
                       </td>
                     );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                  }
 
-        <button className="download-btn" onClick={downloadCSV}>
-          Download CSV
-        </button>
+                  if (col === "properties" && value) {
+                    return (
+                      <td key={col}>
+                        {Object.keys(value).map((k) => (
+                          <div key={k}>
+                            {k}: {JSON.stringify(value[k])}
+                          </div>
+                        ))}
+                      </td>
+                    );
+                  }
+
+                  if (col === "tags" && Array.isArray(value)) {
+                    return (
+                      <td key={col}>
+                        {value.map((tag, i) => (
+                          <div key={i}>
+                            {tag.key}: {tag.value}
+                          </div>
+                        ))}
+                      </td>
+                    );
+                  }
+
+                  return (
+                    <td key={col}>
+                      {typeof value === "object"
+                        ? JSON.stringify(value)
+                        : value}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-    </>
+
+      <button className="download-btn" onClick={handleDownloadCSV}>
+        Download CSV
+      </button>
+    </div>
   );
 }
 
