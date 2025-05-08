@@ -4,6 +4,9 @@ import useShowAllColumns from "../../hooks/showAllColumns";
 import "./Navbar.css";
 import Logo from "../../assets/BNP_Logo.png";
 import ApplyButton from "../Button/Button";
+import ColumnSelector from "../SelectedList/SelectedList";
+import APISelector from "../SelectedList/SelectedList";
+import { downloadCSV } from "../../utils/downloadCSV";
 import {
   FiHome,
   FiInfo,
@@ -57,25 +60,23 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
           </a>
         </nav>
 
-        <div
-          className={`column-selector ${collapsed ? "hide-columns" : ""} ${
-            showAllColumns ? "expanded" : ""
-          }`}
-        >
-          <h2 className="column-selector-title">Select Columns:</h2>
-          <div className="checkbox-grid">
-            {(showAllColumns ? headers : headers.slice(0, 5)).map((header) => (
-              <div key={header} className="checkbox-item">
-                <input
-                  type="checkbox"
-                  checked={selectedColumns.includes(header)}
-                  onChange={() => handleColumnSelect(header)}
-                />
-                <label>{header}</label>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* <APISelector
+          headers={["All", "Entities", "V1", "V2"]}
+          selectedColumns={selectedColumns}
+          handleColumnSelect={handleColumnSelect}
+          collapsed={collapsed}
+          showAllColumns={showAllColumns}
+          title="API" // Custom title here
+        /> */}
+
+        <ColumnSelector
+          headers={headers}
+          selectedColumns={selectedColumns}
+          handleColumnSelect={handleColumnSelect}
+          collapsed={collapsed}
+          showAllColumns={showAllColumns}
+          title="Select Columns"
+        />
 
         {headers.length > 5 && !collapsed && (
           <button className="toggle-columns-btn" onClick={toggleShowColumns}>
@@ -94,7 +95,7 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
           color="#029e7a"
           width="200px"
           height="40px"
-          onClick={""}
+          onClick={downloadCSV}
         />
       </div>
     </div>
