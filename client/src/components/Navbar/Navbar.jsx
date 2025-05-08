@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import useSidebarCollapse from "../../Hooks/useSidebarCollapse";
+import useShowAllColumns from "../../Hooks/showAllColumns";
 import "./Navbar.css";
 import Logo from "../../assets/BNP_Logo.png";
 import {
@@ -13,16 +15,8 @@ import {
 } from "react-icons/fi";
 
 function Navbar({ headers, selectedColumns, handleColumnSelect }) {
-  const [collapsed, setCollapsed] = useState(true);
-  const [showAllColumns, setShowAllColumns] = useState(false);
-
-  const toggleSidebar = () => {
-    setCollapsed(!collapsed);
-  };
-
-  const toggleShowColumns = () => {
-    setShowAllColumns(!showAllColumns);
-  };
+  const { collapsed, toggleSidebar } = useSidebarCollapse(true);
+  const { showAllColumns, toggleShowColumns } = useShowAllColumns();
 
   useEffect(() => {
     const body = document.body;
