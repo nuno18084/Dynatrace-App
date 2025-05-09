@@ -18,6 +18,9 @@
 }
 
 .sidebar-header {
+  position: sticky;
+  top: 0;
+  background-color: #1c1c1c;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,8 +57,8 @@
 }
 
 .collapse-btn:hover {
-  background-color: #029e7a;
-  color: #ffffff;
+  /* background-color: #029e7a; */
+  color: #029e7a;
 }
 
 .sidebar-menu {

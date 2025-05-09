@@ -5,7 +5,7 @@ import "./Navbar.css";
 import Logo from "../../assets/BNP_Logo.png";
 import ApplyButton from "../Button/Button";
 import ColumnSelector from "../SelectedList/SelectedList";
-import APISelector from "../SelectedList/SelectedList";
+// import APISelector from "../SelectedList/SelectedList";
 import { downloadCSV } from "../../utils/downloadCSV";
 import {
   FiHome,
@@ -13,7 +13,7 @@ import {
   FiSettings,
   FiMail,
   FiChevronsLeft,
-  FiChevronsRight,
+  FiMenu,
   FiChevronDown,
   FiChevronUp,
 } from "react-icons/fi";
@@ -37,7 +37,7 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
         <div className="sidebar-header">
           <img src={Logo} alt="BNP Logo" className="logo-img" />
           <button className="collapse-btn" onClick={toggleSidebar}>
-            {collapsed ? <FiChevronsRight /> : <FiChevronsLeft />}
+            {collapsed ? <FiMenu /> : <FiChevronsLeft />}
           </button>
         </div>
 
@@ -93,7 +93,7 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
           className="apply-btn"
           text="Apply"
           color="#029e7a"
-          width="200px"
+          width="80%"
           height="40px"
           onClick={downloadCSV}
         />
