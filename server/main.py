@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import random
 import pandas as pd
@@ -8,6 +8,11 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route('/api/data')
 def get_mock_entities():
+    # Obter os filtros do query string
+    env_filter = request.args.get('env')
+    api_filter = request.args.get('api')
+    column_filter = request.args.getlist('columns')  # recebe lista ?columns=A&columns=B
+
     types = ["HOST", "SERVICE", "PROCESS_GROUP", "APPLICATION"]
     os_types = ["LINUX", "WINDOWS", "UNIX"]
     mock_entities = []
@@ -28,17 +33,16 @@ def get_mock_entities():
             },
             "tags": [
                 {"key": "env", "value": random.choice(["dev", "qa", "prod"])},
-                {"key": "team", "value": random.choice(["team-a", "team-b", "team-c"])}
+                {"key": "api", "value": random.choice(["Entities", "V1", "V2"])}
             ],
             "firstSeenTimestamp": 1700000000000 + i * 1000000,
             "lastSeenTimestamp": 1705000000000 + i * 2000000
         }
         mock_entities.append(entity)
 
-    # Flatten top-level JSON fields
     df = pd.json_normalize(mock_entities)
 
-    # Expand tags: convert list of dicts into individual columns
+    # Expand tags
     def extract_tags(row):
         tag_dict = {}
         for tag in row.get("tags", []):
@@ -49,19 +53,22 @@ def get_mock_entities():
     tag_df = df.apply(extract_tags, axis=1)
     df = pd.concat([df.drop(columns=["tags"]), tag_df], axis=1)
 
-    # Flatten list fields
-    if "fromRelationships.isRunningOn" in df.columns:
-        df["fromRelationships.isRunningOn"] = df["fromRelationships.isRunningOn"].apply(
-            lambda x: ", ".join(x) if isinstance(x, list) else x
-        )
+    # Flatten arrays
+    df["fromRelationships.isRunningOn"] = df["fromRelationships.isRunningOn"].apply(
+        lambda x: ", ".join(x) if isinstance(x, list) else x
+    )
+    df["properties.ipAddresses"] = df["properties.ipAddresses"].apply(
+        lambda x: ", ".join(x) if isinstance(x, list) else x
+    )
 
-    if "properties.ipAddresses" in df.columns:
-        df["properties.ipAddresses"] = df["properties.ipAddresses"].apply(
-            lambda x: ", ".join(x) if isinstance(x, list) else x
-        )
+    # ❗ Filtrar
+    if env_filter:
+        df = df[df["tag_env"] == env_filter]
+    if api_filter:
+        df = df[df["tag_api"] == api_filter]
+    if column_filter:
+        df = df[column_filter] if all(col in df.columns for col in column_filter) else df
 
-    # Optional: flatten nested dictionary fields (already mostly done by json_normalize)
-    # Convert to JSON format
     return jsonify({
         "totalCount": len(df),
         "pageSize": 20,

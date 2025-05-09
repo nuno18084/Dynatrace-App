@@ -7,6 +7,7 @@ import ApplyButton from "../Button/Button";
 import ColumnSelector from "../SelectedList/SelectedList";
 import APISelector from "../SelectedList/SelectedList";
 import EnvSelector from "../SelectedList/SelectedList";
+import { useFilters } from "../../Hooks/useFilters";
 // import { downloadCSV } from "../../utils/downloadCSV";
 import {
   FiHome,
@@ -19,9 +20,10 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 
-function Navbar({ headers, selectedColumns, handleColumnSelect }) {
+function Navbar({ headers }) {
   const { collapsed, toggleSidebar } = useSidebarCollapse(false);
   const { showAllColumns, toggleShowColumns } = useShowAllColumns();
+  const { filters, setEnv, setApi, setColumns } = useFilters();
 
   useEffect(() => {
     const body = document.body;
@@ -63,26 +65,31 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
 
         <EnvSelector
           headers={["All", "PROD", "PPD", "UAT", "IST"]}
-          selectedColumns={selectedColumns}
-          handleColumnSelect={handleColumnSelect}
+          selectedColumns={[filters.env]}
+          handleColumnSelect={(val) => setEnv(val)}
           collapsed={collapsed}
           showAllColumns={showAllColumns}
-          title="Environment" // Custom title here
+          title="Environment"
         />
 
         <APISelector
           headers={["All", "Entities", "V1", "V2"]}
-          selectedColumns={selectedColumns}
-          handleColumnSelect={handleColumnSelect}
+          selectedColumns={[filters.api]}
+          handleColumnSelect={(val) => setApi(val)}
           collapsed={collapsed}
           showAllColumns={showAllColumns}
-          title="API" // Custom title here
+          title="API"
         />
 
         <ColumnSelector
           headers={headers}
-          selectedColumns={selectedColumns}
-          handleColumnSelect={handleColumnSelect}
+          selectedColumns={filters.columns}
+          handleColumnSelect={(val) => {
+            const updated = filters.columns.includes(val)
+              ? filters.columns.filter((c) => c !== val)
+              : [...filters.columns, val];
+            setColumns(updated);
+          }}
           collapsed={collapsed}
           showAllColumns={showAllColumns}
           title="Select Columns"
