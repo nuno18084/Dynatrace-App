@@ -5,8 +5,9 @@ import "./Navbar.css";
 import Logo from "../../assets/BNP_Logo.png";
 import ApplyButton from "../Button/Button";
 import ColumnSelector from "../SelectedList/SelectedList";
-// import APISelector from "../SelectedList/SelectedList";
-import { downloadCSV } from "../../utils/downloadCSV";
+import APISelector from "../SelectedList/SelectedList";
+import EnvSelector from "../SelectedList/SelectedList";
+// import { downloadCSV } from "../../utils/downloadCSV";
 import {
   FiHome,
   FiInfo,
@@ -60,14 +61,23 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
           </a>
         </nav>
 
-        {/* <APISelector
+        <EnvSelector
+          headers={["All", "PROD", "PPD", "UAT", "IST"]}
+          selectedColumns={selectedColumns}
+          handleColumnSelect={handleColumnSelect}
+          collapsed={collapsed}
+          showAllColumns={showAllColumns}
+          title="Environment" // Custom title here
+        />
+
+        <APISelector
           headers={["All", "Entities", "V1", "V2"]}
           selectedColumns={selectedColumns}
           handleColumnSelect={handleColumnSelect}
           collapsed={collapsed}
           showAllColumns={showAllColumns}
           title="API" // Custom title here
-        /> */}
+        />
 
         <ColumnSelector
           headers={headers}
@@ -95,7 +105,7 @@ function Navbar({ headers, selectedColumns, handleColumnSelect }) {
           color="#029e7a"
           width="80%"
           height="40px"
-          onClick={downloadCSV}
+          onClick={toggleSidebar}
         />
       </div>
     </div>

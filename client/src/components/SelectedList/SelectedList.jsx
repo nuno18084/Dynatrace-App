@@ -1,5 +1,4 @@
-// components/ColumnSelector/ColumnSelector.jsx
-import "./SelectedList.css"; // optional if you want scoped styles
+import "./SelectedList.css";
 
 const SelectedList = ({
   headers = [],
@@ -7,7 +6,7 @@ const SelectedList = ({
   handleColumnSelect,
   collapsed = false,
   showAllColumns = false,
-  title = "Select Columns:", // default title
+  title = "Select Columns:",
 }) => {
   return (
     <div
