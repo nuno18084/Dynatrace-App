@@ -7,10 +7,13 @@
   cursor: pointer;
   font-weight: bold;
   margin-top: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .download-btn:hover {
-  background-color: #018786;
+  background-color: rgb(208, 208, 208) !important;
+  color: #029e7a;
+  border: 1px solid #029e7a;
 }
 
 .apply-btn {
