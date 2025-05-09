@@ -20,7 +20,7 @@ import {
 } from "react-icons/fi";
 
 function Navbar({ headers, selectedColumns, handleColumnSelect }) {
-  const { collapsed, toggleSidebar } = useSidebarCollapse(true);
+  const { collapsed, toggleSidebar } = useSidebarCollapse(false);
   const { showAllColumns, toggleShowColumns } = useShowAllColumns();
 
   useEffect(() => {

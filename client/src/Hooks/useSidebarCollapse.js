@@ -1,7 +1,7 @@
 // hooks/useSidebarCollapse.js
 import { useState, useEffect } from "react";
 
-export default function useSidebarCollapse(initialState = true) {
+export default function useSidebarCollapse(initialState = false) {
   const [collapsed, setCollapsed] = useState(initialState);
 
   useEffect(() => {
