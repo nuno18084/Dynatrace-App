@@ -1,7 +1,20 @@
 import React from "react";
 import "./DataTable.css";
 
-const DataTable = ({ data, selectedColumns }) => {
+const DataTable = ({ data = [], selectedColumns = [] }) => {
+  if (
+    !data ||
+    !selectedColumns ||
+    data.length === 0 ||
+    selectedColumns.length === 0
+  ) {
+    return (
+      <div className="table-container">
+        <p>No data available</p>
+      </div>
+    );
+  }
+
   return (
     <div className="table-container">
       <table>

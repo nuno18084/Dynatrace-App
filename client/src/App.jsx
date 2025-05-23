@@ -22,18 +22,22 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await api.get("/api/data");
         const entities = response.data.entities;
-        setData(entities);
-        setLoading(false);
 
         if (entities && entities.length > 0) {
+          setData(entities);
           const dynamicHeaders = Object.keys(entities[0]);
           setHeaders(dynamicHeaders);
           setSelectedColumns(dynamicHeaders); // Select all by default
+        } else {
+          setError("No data received from server");
         }
       } catch (err) {
-        setError("Erro ao carregar dados", err);
+        console.error("Error fetching data:", err);
+        setError(err.message || "Error loading data");
+      } finally {
         setLoading(false);
       }
     };
@@ -43,6 +47,8 @@ function App() {
 
   if (loading) return <div className="loading">Loading...</div>;
   if (error) return <div className="error">{error}</div>;
+  if (!data || !selectedColumns)
+    return <div className="loading">Initializing...</div>;
 
   // Function to handle column selection
   const handleColumnSelection = (column) => {
@@ -51,19 +57,21 @@ function App() {
 
   // Function to download CSV
   const handleDownloadCSV = () => {
-    downloadCSV(data, selectedColumns);
+    if (data && data.length > 0) {
+      downloadCSV(data, selectedColumns);
+    }
   };
 
   return (
     <div className="app">
       <Navbar
-        headers={headers}
-        selectedColumns={selectedColumns}
+        headers={headers || []}
+        selectedColumns={selectedColumns || []}
         handleColumnSelect={handleColumnSelection}
       />
       <h1 className="title">Dynatrace Data</h1>
 
-      <DataTable data={data} selectedColumns={selectedColumns} />
+      <DataTable data={data || []} selectedColumns={selectedColumns || []} />
 
       <DownloadButton
         text="Download CSV"
