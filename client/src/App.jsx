@@ -6,7 +6,7 @@ import useHeaders from "./hooks/useHeaders";
 import useSelectedColumns from "./hooks/useSelectedColumns";
 import { handleColumnSelect } from "./utils/handleColumnSelect";
 import { downloadCSV } from "./utils/downloadCSV";
-import axios from "axios";
+import api from "./utils/api";
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import DataTable from "./components/DataTable/DataTable";
@@ -22,7 +22,7 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:5000/api/data");
+        const response = await api.get("/api/data");
         const entities = response.data.entities;
         setData(entities);
         setLoading(false);

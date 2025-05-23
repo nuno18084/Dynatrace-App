@@ -1,13 +1,22 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask import Flask, jsonify, request, make_response
 import random
 import pandas as pd
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-@app.route('/api/data')
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
+
+@app.route('/api/data', methods=['GET', 'OPTIONS'])
 def get_mock_entities():
+    if request.method == "OPTIONS":
+        return make_response("OK", 200)
+
     # Obter os filtros do query string
     env_filter = request.args.get('env')
     api_filter = request.args.get('api')
@@ -76,4 +85,4 @@ def get_mock_entities():
     })
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)
