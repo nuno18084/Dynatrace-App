@@ -1,7 +1,36 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import "./DataTable.css";
 
-const DataTable = ({ data = [], selectedColumns = [] }) => {
+const DataTable = ({
+  data = [],
+  selectedColumns = [],
+  onLoadMore,
+  hasMore,
+}) => {
+  const observerTarget = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          onLoadMore();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [onLoadMore, hasMore]);
+
   if (
     !data ||
     !selectedColumns ||
@@ -27,7 +56,7 @@ const DataTable = ({ data = [], selectedColumns = [] }) => {
         </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={index}>
+            <tr key={item.entityId || index}>
               {selectedColumns.map((col) => {
                 let value = item[col];
 
@@ -84,6 +113,9 @@ const DataTable = ({ data = [], selectedColumns = [] }) => {
           ))}
         </tbody>
       </table>
+      <div ref={observerTarget} style={{ height: "20px", margin: "10px 0" }}>
+        {hasMore ? "Loading more..." : "No more data"}
+      </div>
     </div>
   );
 };

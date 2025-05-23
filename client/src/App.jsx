@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import useData from "./hooks/useData";
 import useLoading from "./hooks/useLoading";
 import useError from "./hooks/useError";
@@ -19,33 +19,57 @@ function App() {
   const { headers, setHeaders } = useHeaders();
   const { selectedColumns, setSelectedColumns } = useSelectedColumns();
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const fetchData = useCallback(
+    async (page) => {
       try {
         setLoading(true);
-        const response = await api.get("/api/data");
-        const entities = response.data.entities;
+        const response = await api.get("/api/data", {
+          params: {
+            page: page,
+            per_page: 50,
+          },
+        });
 
-        if (entities && entities.length > 0) {
+        const { entities, totalPages: total, currentPage } = response.data;
+
+        if (currentPage === 1) {
           setData(entities);
-          const dynamicHeaders = Object.keys(entities[0]);
-          setHeaders(dynamicHeaders);
-          setSelectedColumns(dynamicHeaders); // Select all by default
+          if (entities && entities.length > 0) {
+            const dynamicHeaders = Object.keys(entities[0]);
+            setHeaders(dynamicHeaders);
+            setSelectedColumns(dynamicHeaders);
+          }
         } else {
-          setError("No data received from server");
+          setData((prevData) => [...prevData, ...entities]);
         }
+
+        setTotalPages(total);
+        setHasMore(currentPage < total);
+        setCurrentPage(currentPage);
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err.message || "Error loading data");
       } finally {
         setLoading(false);
       }
-    };
+    },
+    [setData, setLoading, setHeaders, setSelectedColumns, setError]
+  );
 
-    fetchData();
-  }, [setData, setLoading, setHeaders, setSelectedColumns, setError]);
+  useEffect(() => {
+    fetchData(1);
+  }, [fetchData]);
 
-  if (loading) return <div className="loading">Loading...</div>;
+  const handleLoadMore = useCallback(() => {
+    if (!loading && hasMore) {
+      fetchData(currentPage + 1);
+    }
+  }, [loading, hasMore, currentPage, fetchData]);
+
   if (error) return <div className="error">{error}</div>;
   if (!data || !selectedColumns)
     return <div className="loading">Initializing...</div>;
@@ -71,7 +95,12 @@ function App() {
       />
       <h1 className="title">Dynatrace Data</h1>
 
-      <DataTable data={data || []} selectedColumns={selectedColumns || []} />
+      <DataTable
+        data={data || []}
+        selectedColumns={selectedColumns || []}
+        onLoadMore={handleLoadMore}
+        hasMore={hasMore}
+      />
 
       <DownloadButton
         text="Download CSV"
