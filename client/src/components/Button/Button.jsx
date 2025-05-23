@@ -1,18 +1,17 @@
 import "./Button.css";
 import "../../App.css";
 
-const Button = ({ text, color, width, height, onClick }) => {
+const Button = ({ text, color, height, onClick }) => {
   return (
     <button
-      className="download-btn app"
+      className="download-btn"
       onClick={onClick}
       style={{
         backgroundColor: color,
-        width: width,
         height: height,
       }}
     >
-      {text}
+      <span style={{ display: "inline-block" }}>{text}</span>
     </button>
   );
 };

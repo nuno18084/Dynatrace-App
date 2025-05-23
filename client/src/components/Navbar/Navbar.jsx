@@ -34,6 +34,88 @@ function Navbar({ headers }) {
     }
   }, [collapsed]);
 
+  // Log whenever filters change
+  useEffect(() => {
+    console.log("Current Redux State:", {
+      environments: filters.env,
+      apis: filters.api,
+      columns: filters.columns,
+    });
+  }, [filters]);
+
+  const handleEnvSelect = (val) => {
+    const envOptions = ["PROD", "PPD", "UAT", "IST"];
+    console.log("Environment Selection:", {
+      action: val,
+      currentSelection: filters.env,
+    });
+
+    if (val === "ALL_SELECT") {
+      console.log("Selecting all environments:", envOptions);
+      setEnv(envOptions);
+    } else if (val === "ALL_DESELECT") {
+      console.log("Deselecting all environments");
+      setEnv([]);
+    } else {
+      const currentEnv = Array.isArray(filters.env)
+        ? filters.env
+        : [filters.env].filter(Boolean);
+      const updated = currentEnv.includes(val)
+        ? currentEnv.filter((env) => env !== val)
+        : [...currentEnv, val];
+      console.log("Updated environments:", updated);
+      setEnv(updated);
+    }
+  };
+
+  const handleApiSelect = (val) => {
+    const apiOptions = ["Entities", "V1", "V2"];
+    console.log("API Selection:", {
+      action: val,
+      currentSelection: filters.api,
+    });
+
+    if (val === "ALL_SELECT") {
+      console.log("Selecting all APIs:", apiOptions);
+      setApi(apiOptions);
+    } else if (val === "ALL_DESELECT") {
+      console.log("Deselecting all APIs");
+      setApi([]);
+    } else {
+      const currentApi = Array.isArray(filters.api)
+        ? filters.api
+        : [filters.api].filter(Boolean);
+      const updated = currentApi.includes(val)
+        ? currentApi.filter((api) => api !== val)
+        : [...currentApi, val];
+      console.log("Updated APIs:", updated);
+      setApi(updated);
+    }
+  };
+
+  const handleColumnsSelect = (val, affectedHeaders) => {
+    console.log("Columns Selection:", {
+      action: val,
+      currentSelection: filters.columns,
+      affectedHeaders: affectedHeaders,
+    });
+
+    if (val === "ALL_SELECT") {
+      const toSelect = affectedHeaders || headers;
+      console.log("Selecting all columns:", toSelect);
+      setColumns(toSelect);
+    } else if (val === "ALL_DESELECT") {
+      console.log("Deselecting all columns");
+      setColumns([]);
+    } else {
+      const updated = filters.columns.includes(val)
+        ? filters.columns.filter((c) => c !== val)
+        : [...filters.columns, val];
+      console.log("Updated columns:", updated);
+      setColumns(updated);
+    }
+  };
+
   return (
     <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
       <div className="sidebar-scrollable">
@@ -64,32 +146,35 @@ function Navbar({ headers }) {
         </nav>
 
         <EnvSelector
-          headers={["All", "PROD", "PPD", "UAT", "IST"]}
-          selectedColumns={[filters.env]}
-          handleColumnSelect={(val) => setEnv(val)}
+          headers={["PROD", "PPD", "UAT", "IST"]}
+          selectedColumns={
+            Array.isArray(filters.env)
+              ? filters.env
+              : [filters.env].filter(Boolean)
+          }
+          handleColumnSelect={handleEnvSelect}
           collapsed={collapsed}
-          showAllColumns={showAllColumns}
+          showAllColumns={true}
           title="Environment"
         />
 
         <APISelector
-          headers={["All", "Entities", "V1", "V2"]}
-          selectedColumns={[filters.api]}
-          handleColumnSelect={(val) => setApi(val)}
+          headers={["Entities", "V1", "V2"]}
+          selectedColumns={
+            Array.isArray(filters.api)
+              ? filters.api
+              : [filters.api].filter(Boolean)
+          }
+          handleColumnSelect={handleApiSelect}
           collapsed={collapsed}
-          showAllColumns={showAllColumns}
+          showAllColumns={true}
           title="API"
         />
 
         <ColumnSelector
           headers={headers}
           selectedColumns={filters.columns}
-          handleColumnSelect={(val) => {
-            const updated = filters.columns.includes(val)
-              ? filters.columns.filter((c) => c !== val)
-              : [...filters.columns, val];
-            setColumns(updated);
-          }}
+          handleColumnSelect={handleColumnsSelect}
           collapsed={collapsed}
           showAllColumns={showAllColumns}
           title="Select Columns"
@@ -101,19 +186,9 @@ function Navbar({ headers }) {
           </button>
         )}
       </div>
-      <div
-        className={`column-selector ${collapsed ? "hide-columns" : ""} ${
-          showAllColumns ? "expanded" : ""
-        }`}
-      >
-        <ApplyButton
-          className="apply-btn"
-          text="Apply"
-          color="#029e7a"
-          width="80%"
-          height="40px"
-          onClick={toggleSidebar}
-        />
+
+      <div className="apply-button-container">
+        <button onClick={toggleSidebar}>Apply</button>
       </div>
     </div>
   );
