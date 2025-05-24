@@ -114,7 +114,7 @@ const DataTable = ({
         </tbody>
       </table>
       <div ref={observerTarget} style={{ height: "20px", margin: "10px 0" }}>
-        {hasMore ? "Loading more..." : "No more data"}
+        {hasMore ? "Loading data..." : "No more data"}
       </div>
     </div>
   );

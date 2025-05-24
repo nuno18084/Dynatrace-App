@@ -1,11 +1,12 @@
 /* Contêiner da tabela com rolagem horizontal e vertical */
 .table-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   overflow: auto;
   max-height: 70vh;
   position: relative;
+  scroll-behavior: smooth;
 }
 
 /* When navbar is open, adjust the table margin */
@@ -56,9 +57,4 @@ tr:hover {
   font-style: italic;
   color: #ffffff;
   background-color: #1f1f1f;
-}
-
-/* Smooth scrolling */
-.table-container {
-  scroll-behavior: smooth;
 }
