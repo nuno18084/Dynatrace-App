@@ -11,7 +11,6 @@ import "./App.css";
 import SideNav from "./components/SideNav/SideNav";
 import TopNav from "./components/TopNav/TopNav";
 import DataTable from "./components/DataTable/DataTable";
-import DownloadButton from "./components/Button/Button";
 
 function App() {
   const { data, setData } = useData();
@@ -111,15 +110,6 @@ function App() {
         selectedColumns={selectedColumns || []}
         onLoadMore={handleLoadMore}
         hasMore={hasMore}
-      />
-
-      <DownloadButton
-        text="Download CSV"
-        color="#029e7a"
-        width="1200px"
-        height="40px"
-        onClick={handleDownloadCSV}
-        marginBottom="100px"
       />
     </div>
   );

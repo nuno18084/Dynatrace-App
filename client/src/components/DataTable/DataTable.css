@@ -3,10 +3,18 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  overflow: auto;
-  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
   position: relative;
-  scroll-behavior: smooth;
+  margin-top: 20px;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow: auto;
+  max-height: calc(100vh - 250px);
+  background-color: #1f1f1f;
+  border-radius: 4px;
 }
 
 /* When navbar is open, adjust the table margin */
@@ -18,6 +26,7 @@ table {
   width: 100%;
   border-collapse: collapse;
   background-color: #1f1f1f;
+  color: #e0e0e0;
 }
 
 thead {
@@ -27,14 +36,17 @@ thead {
   z-index: 1;
 }
 
-th {
-  background-color: #2c2c2c;
+th,
+td {
   padding: 12px;
   text-align: left;
-  font-weight: bold;
-  color: #ffffff;
-  border: 1px solid #333;
-  white-space: nowrap;
+  border-bottom: 1px solid #333;
+}
+
+th {
+  background-color: #252525;
+  font-weight: 500;
+  color: #029e7a;
 }
 
 td {
@@ -48,7 +60,42 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-  background-color: #3a3a3a;
+  background-color: #252525;
+}
+
+tr.selected {
+  background-color: rgba(2, 158, 122, 0.1);
+}
+
+tr.selected:hover {
+  background-color: rgba(2, 158, 122, 0.15);
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #029e7a;
+}
+
+/* First column (checkbox column) styling */
+th:first-child,
+td:first-child {
+  width: 40px;
+  text-align: center;
+  padding: 8px;
+}
+
+/* Nested object styling */
+td div {
+  margin: 2px 0;
+  padding: 2px 0;
+  border-bottom: 1px solid #333;
+}
+
+td div:last-child {
+  border-bottom: none;
 }
 
 .loading-more {
@@ -57,4 +104,16 @@ tr:hover {
   font-style: italic;
   color: #ffffff;
   background-color: #1f1f1f;
+  margin-bottom: 16px;
+}
+
+/* Ensure table actions are visible and properly positioned */
+.table-actions {
+  position: sticky;
+  bottom: 0;
+  background-color: #1c1c1c;
+  padding: 16px;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: auto;
+  z-index: 10;
 }
