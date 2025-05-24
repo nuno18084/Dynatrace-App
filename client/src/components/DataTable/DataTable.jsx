@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import "./DataTable.css";
-import TableActions from "../Table/TableActions";
+import ExportActions from "../ExportAction/ExportActions";
 import SearchBar from "../SearchBar/SearchBar";
 import { useTableSearch } from "../../Hooks/useTableSearch";
 import { useTableSelection } from "../../Hooks/useTableSelection";
@@ -164,7 +164,7 @@ const DataTable = ({
           {hasMore ? "Loading data..." : "No more data"}
         </div>
       </div>
-      <TableActions
+      <ExportActions
         selectedRows={selectedRows}
         onExportSelected={handleExportSelected}
         onExportAll={handleExportAll}
