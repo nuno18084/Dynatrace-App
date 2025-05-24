@@ -188,7 +188,12 @@ function SideNav({ headers }) {
       </div>
 
       <div className="apply-button-container">
-        <button onClick={toggleSidebar}>Apply</button>
+        <ApplyButton
+          text="Apply"
+          color="#029e7a"
+          height="36px"
+          onClick={toggleSidebar}
+        />
       </div>
     </div>
   );
