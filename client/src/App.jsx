@@ -1,12 +1,13 @@
-import { useEffect, useState, useCallback } from "react";
-import useData from "./hooks/useData";
-import useLoading from "./hooks/useLoading";
-import useError from "./hooks/useError";
-import useHeaders from "./hooks/useHeaders";
-import useSelectedColumns from "./hooks/useSelectedColumns";
+import { useEffect, useState } from "react";
+import useData from "./Hooks/useData";
+import useLoading from "./Hooks/useLoading";
+import useError from "./Hooks/useError";
+import useHeaders from "./Hooks/useHeaders";
+import useSelectedColumns from "./Hooks/useSelectedColumns";
+import { useFetchData } from "./Hooks/useFetchData";
+import { useInfiniteScroll } from "./Hooks/useInfiniteScroll";
 import { handleColumnSelect } from "./utils/handleColumnSelect";
 // import { downloadCSV } from "./utils/downloadCSV";
-import api from "./utils/api";
 import "./App.css";
 import SideNav from "./components/SideNav/SideNav";
 import TopNav from "./components/TopNav/TopNav";
@@ -22,61 +23,38 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const fetchData = useCallback(
-    async (page) => {
-      try {
-        setLoading(true);
-        const response = await api.get("/api/data", {
-          params: {
-            page: page,
-            per_page: 50,
-            columns: selectedColumns,
-          },
-        });
-
-        const { entities, currentPage, totalPages } = response.data;
-
-        if (page === 1) {
-          setData(entities);
-          if (entities && entities.length > 0) {
-            const dynamicHeaders = Object.keys(entities[0]);
-            setHeaders(dynamicHeaders);
-            if (!selectedColumns.length) {
-              setSelectedColumns(dynamicHeaders);
-            }
-          }
-        } else {
-          setData((prevData) => [...prevData, ...entities]);
-        }
-
-        setHasMore(currentPage < totalPages);
-        setCurrentPage(currentPage);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-        setError(err.message || "Error loading data");
-      } finally {
-        setLoading(false);
-      }
-    },
-    [
-      setData,
-      setLoading,
-      setHeaders,
-      setSelectedColumns,
-      setError,
-      selectedColumns,
-    ]
+  const fetchData = useFetchData(
+    setData,
+    setLoading,
+    setHeaders,
+    setSelectedColumns,
+    setError,
+    selectedColumns
   );
 
   useEffect(() => {
-    fetchData(1);
+    const initializeFetch = async () => {
+      const result = await fetchData(1);
+      if (!result.error) {
+        setCurrentPage(result.currentPage);
+        setHasMore(result.hasMore);
+      }
+    };
+    initializeFetch();
   }, [fetchData]);
 
-  const handleLoadMore = useCallback(() => {
-    if (!loading && hasMore) {
-      fetchData(currentPage + 1);
+  const handleLoadMore = useInfiniteScroll(
+    loading,
+    hasMore,
+    currentPage,
+    async (nextPage) => {
+      const result = await fetchData(nextPage);
+      if (!result.error) {
+        setCurrentPage(result.currentPage);
+        setHasMore(result.hasMore);
+      }
     }
-  }, [loading, hasMore, currentPage, fetchData]);
+  );
 
   if (error) return <div className="error">{error}</div>;
   if (!data || !selectedColumns)

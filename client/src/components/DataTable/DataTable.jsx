@@ -1,7 +1,10 @@
-import React, { useRef, useEffect, useState, useMemo } from "react";
+import React, { useRef, useEffect } from "react";
 import "./DataTable.css";
 import TableActions from "../Table/TableActions";
 import SearchBar from "../SearchBar/SearchBar";
+import { useTableSearch } from "../../Hooks/useTableSearch";
+import { useTableSelection } from "../../Hooks/useTableSelection";
+import { useCSVExport } from "../../Hooks/useCSVExport";
 
 const DataTable = ({
   data = [],
@@ -9,28 +12,14 @@ const DataTable = ({
   onLoadMore,
   hasMore,
 }) => {
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { setSearchQuery, filteredData } = useTableSearch(
+    data,
+    selectedColumns
+  );
+  const { selectedRows, handleRowSelect, handleSelectAll, isSelected } =
+    useTableSelection();
+  const { handleExport } = useCSVExport();
   const observerTarget = useRef(null);
-
-  const filteredData = useMemo(() => {
-    if (!searchQuery) return data;
-
-    return data.filter((item) => {
-      return selectedColumns.some((col) => {
-        const value = item[col];
-        if (value == null) return false;
-
-        if (typeof value === "object") {
-          return JSON.stringify(value)
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase());
-        }
-
-        return String(value).toLowerCase().includes(searchQuery.toLowerCase());
-      });
-    });
-  }, [data, searchQuery, selectedColumns]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -54,58 +43,16 @@ const DataTable = ({
     };
   }, [onLoadMore, hasMore]);
 
-  const handleRowSelect = (item) => {
-    setSelectedRows((prev) => {
-      const itemId = item.entityId;
-      if (prev.find((row) => row.entityId === itemId)) {
-        return prev.filter((row) => row.entityId !== itemId);
-      }
-      return [...prev, item];
-    });
-  };
-
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
-  const handleExportSelected = (selectedData) => {
-    const csvContent = generateCSV(selectedData, selectedColumns);
-    downloadCSV(csvContent, "selected_data.csv");
+  const handleExportSelected = () => {
+    handleExport(selectedRows, selectedColumns, "selected_data.csv");
   };
 
   const handleExportAll = () => {
-    const csvContent = generateCSV(filteredData, selectedColumns);
-    downloadCSV(csvContent, "all_data.csv");
-  };
-
-  const generateCSV = (dataToExport, columns) => {
-    const header = columns.join(",");
-    const rows = dataToExport.map((item) =>
-      columns
-        .map((col) => {
-          const value = item[col];
-          if (typeof value === "object") {
-            return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
-          }
-          return `"${value}"`;
-        })
-        .join(",")
-    );
-    return [header, ...rows].join("\n");
-  };
-
-  const downloadCSV = (content, filename) => {
-    const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute("href", url);
-      link.setAttribute("download", filename);
-      link.style.visibility = "hidden";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
+    handleExport(filteredData, selectedColumns, "all_data.csv");
   };
 
   if (
@@ -132,7 +79,7 @@ const DataTable = ({
                 <input
                   type="checkbox"
                   onChange={(e) =>
-                    setSelectedRows(e.target.checked ? filteredData : [])
+                    handleSelectAll(e.target.checked ? filteredData : [])
                   }
                   checked={selectedRows.length === filteredData.length}
                 />
@@ -146,20 +93,12 @@ const DataTable = ({
             {filteredData.map((item, index) => (
               <tr
                 key={item.entityId || index}
-                className={
-                  selectedRows.find((row) => row.entityId === item.entityId)
-                    ? "selected"
-                    : ""
-                }
+                className={isSelected(item.entityId) ? "selected" : ""}
               >
                 <td>
                   <input
                     type="checkbox"
-                    checked={
-                      !!selectedRows.find(
-                        (row) => row.entityId === item.entityId
-                      )
-                    }
+                    checked={isSelected(item.entityId)}
                     onChange={() => handleRowSelect(item)}
                   />
                 </td>
