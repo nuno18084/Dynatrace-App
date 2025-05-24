@@ -5,7 +5,7 @@ import useError from "./hooks/useError";
 import useHeaders from "./hooks/useHeaders";
 import useSelectedColumns from "./hooks/useSelectedColumns";
 import { handleColumnSelect } from "./utils/handleColumnSelect";
-import { downloadCSV } from "./utils/downloadCSV";
+// import { downloadCSV } from "./utils/downloadCSV";
 import api from "./utils/api";
 import "./App.css";
 import SideNav from "./components/SideNav/SideNav";
@@ -82,18 +82,18 @@ function App() {
   if (!data || !selectedColumns)
     return <div className="loading">Initializing...</div>;
 
-  const handleDownloadCSV = () => {
-    if (data && data.length > 0) {
-      const filteredData = data.map((item) => {
-        const filteredItem = {};
-        selectedColumns.forEach((col) => {
-          filteredItem[col] = item[col];
-        });
-        return filteredItem;
-      });
-      downloadCSV(filteredData, selectedColumns);
-    }
-  };
+  // const handleDownloadCSV = () => {
+  //   if (data && data.length > 0) {
+  //     const filteredData = data.map((item) => {
+  //       const filteredItem = {};
+  //       selectedColumns.forEach((col) => {
+  //         filteredItem[col] = item[col];
+  //       });
+  //       return filteredItem;
+  //     });
+  //     downloadCSV(filteredData, selectedColumns);
+  //   }
+  // };
 
   return (
     <div className="app">
