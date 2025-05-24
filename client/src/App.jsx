@@ -9,6 +9,7 @@ import { downloadCSV } from "./utils/downloadCSV";
 import api from "./utils/api";
 import "./App.css";
 import SideNav from "./components/SideNav/SideNav";
+import TopNav from "./components/TopNav/TopNav";
 import DataTable from "./components/DataTable/DataTable";
 import DownloadButton from "./components/Button/Button";
 
@@ -97,6 +98,7 @@ function App() {
 
   return (
     <div className="app">
+      <TopNav />
       <SideNav
         headers={headers || []}
         selectedColumns={selectedColumns || []}

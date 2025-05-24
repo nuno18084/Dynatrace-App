@@ -1,0 +1,51 @@
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: #1c1c1c;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.top-nav-content {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.account-section {
+  display: flex;
+  align-items: center;
+}
+
+.account-button {
+  background: none;
+  border: none;
+  color: #e0e0e0;
+  font-size: 1.5rem;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.account-button:hover {
+  background-color: #333;
+  color: #029e7a;
+}
+
+.account-button:active {
+  background-color: #444;
+}
+
+.account-icon {
+  width: 24px;
+  height: 24px;
+}
