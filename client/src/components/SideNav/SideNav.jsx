@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import useSidebarCollapse from "../../hooks/useSidebarCollapse";
 import useShowAllColumns from "../../hooks/showAllColumns";
-import "./Navbar.css";
+import "./SideNav.css";
 import Logo from "../../assets/BNP_Logo.png";
 import ApplyButton from "../Button/Button";
 import ColumnSelector from "../SelectedList/SelectedList";
@@ -20,7 +20,7 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 
-function Navbar({ headers }) {
+function SideNav({ headers }) {
   const { collapsed, toggleSidebar } = useSidebarCollapse(false);
   const { showAllColumns, toggleShowColumns } = useShowAllColumns();
   const { filters, setEnv, setApi, setColumns } = useFilters();
@@ -194,4 +194,4 @@ function Navbar({ headers }) {
   );
 }
 
-export default Navbar;
+export default SideNav;

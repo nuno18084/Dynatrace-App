@@ -8,7 +8,7 @@ import { handleColumnSelect } from "./utils/handleColumnSelect";
 import { downloadCSV } from "./utils/downloadCSV";
 import api from "./utils/api";
 import "./App.css";
-import Navbar from "./components/Navbar/Navbar";
+import SideNav from "./components/SideNav/SideNav";
 import DataTable from "./components/DataTable/DataTable";
 import DownloadButton from "./components/Button/Button";
 
@@ -21,7 +21,6 @@ function App() {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [totalPages, setTotalPages] = useState(1);
 
   const fetchData = useCallback(
     async (page) => {
@@ -31,24 +30,26 @@ function App() {
           params: {
             page: page,
             per_page: 50,
+            columns: selectedColumns,
           },
         });
 
-        const { entities, totalPages: total, currentPage } = response.data;
+        const { entities, currentPage, totalPages } = response.data;
 
-        if (currentPage === 1) {
+        if (page === 1) {
           setData(entities);
           if (entities && entities.length > 0) {
             const dynamicHeaders = Object.keys(entities[0]);
             setHeaders(dynamicHeaders);
-            setSelectedColumns(dynamicHeaders);
+            if (!selectedColumns.length) {
+              setSelectedColumns(dynamicHeaders);
+            }
           }
         } else {
           setData((prevData) => [...prevData, ...entities]);
         }
 
-        setTotalPages(total);
-        setHasMore(currentPage < total);
+        setHasMore(currentPage < totalPages);
         setCurrentPage(currentPage);
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -57,7 +58,14 @@ function App() {
         setLoading(false);
       }
     },
-    [setData, setLoading, setHeaders, setSelectedColumns, setError]
+    [
+      setData,
+      setLoading,
+      setHeaders,
+      setSelectedColumns,
+      setError,
+      selectedColumns,
+    ]
   );
 
   useEffect(() => {
@@ -74,24 +82,25 @@ function App() {
   if (!data || !selectedColumns)
     return <div className="loading">Initializing...</div>;
 
-  // Function to handle column selection
-  const handleColumnSelection = (column) => {
-    handleColumnSelect(column, selectedColumns, setSelectedColumns, headers);
-  };
-
-  // Function to download CSV
   const handleDownloadCSV = () => {
     if (data && data.length > 0) {
-      downloadCSV(data, selectedColumns);
+      const filteredData = data.map((item) => {
+        const filteredItem = {};
+        selectedColumns.forEach((col) => {
+          filteredItem[col] = item[col];
+        });
+        return filteredItem;
+      });
+      downloadCSV(filteredData, selectedColumns);
     }
   };
 
   return (
     <div className="app">
-      <Navbar
+      <SideNav
         headers={headers || []}
         selectedColumns={selectedColumns || []}
-        handleColumnSelect={handleColumnSelection}
+        handleColumnSelect={handleColumnSelect}
       />
       <h1 className="title">Dynatrace Data</h1>
 
