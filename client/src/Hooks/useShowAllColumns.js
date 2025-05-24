@@ -1,4 +1,3 @@
-// hooks/useShowAllColumns.js
 import { useState } from "react";
 
 export default function useShowAllColumns(initialState = false) {

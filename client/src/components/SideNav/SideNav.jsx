@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import useSidebarCollapse from "../../hooks/useSidebarCollapse";
-import useShowAllColumns from "../../hooks/showAllColumns";
+import useSidebarCollapse from "../../Hooks/useSidebarCollapse";
+import useShowAllColumns from "../../Hooks/useShowAllColumns";
 import "./SideNav.css";
 import Logo from "../../assets/BNP_Logo.png";
 import ApplyButton from "../Button/Button";
