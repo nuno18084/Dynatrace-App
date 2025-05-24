@@ -1,8 +1,21 @@
-import React from "react";
-import { FiSearch } from "react-icons/fi";
+import React, { useState } from "react";
+import { FiSearch, FiX } from "react-icons/fi";
 import "./SearchBar.css";
 
 const SearchBar = ({ onSearch }) => {
+  const [searchValue, setSearchValue] = useState("");
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    onSearch(value);
+  };
+
+  const handleClear = () => {
+    setSearchValue("");
+    onSearch("");
+  };
+
   return (
     <div className="search-container">
       <div className="search-wrapper">
@@ -10,9 +23,20 @@ const SearchBar = ({ onSearch }) => {
         <input
           type="text"
           placeholder="Search in table..."
-          onChange={(e) => onSearch(e.target.value)}
+          value={searchValue}
+          onChange={handleChange}
           className="search-input"
         />
+        {searchValue && (
+          <button
+            className="clear-button"
+            onClick={handleClear}
+            aria-label="Clear search"
+            title="Clear search"
+          >
+            <FiX className="clear-icon" />
+          </button>
+        )}
       </div>
     </div>
   );
