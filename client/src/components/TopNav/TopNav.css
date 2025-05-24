@@ -9,10 +9,33 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 2rem;
-  gap: 1rem;
   z-index: 1000;
   grid-area: topnav;
+}
+
+.topnav::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background-color: var(--background-secondary);
+  border-bottom: 1px solid var(--border-color);
+  z-index: -1;
+}
+
+.topnav > div {
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 32px;
+  padding: 0 45px;
+  padding-left: 0px;
+  margin-left: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
 .nav-button {
@@ -26,6 +49,7 @@
   gap: 0.5rem;
   font-size: 1rem;
   transition: color 0.2s ease;
+  position: relative;
 }
 
 .nav-button:hover {
@@ -39,7 +63,6 @@
 /* Theme toggle animation */
 .theme-toggle {
   position: relative;
-  overflow: hidden;
 }
 
 .theme-toggle .icon {
@@ -48,4 +71,44 @@
 
 .theme-toggle:hover .icon {
   transform: rotate(360deg);
+}
+
+/* Tooltip styles */
+.nav-button .tooltip {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  pointer-events: none;
+  z-index: 1100;
+}
+
+.nav-button .tooltip::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background-color: var(--background-secondary);
+  border-left: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color);
+}
+
+.nav-button:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+  bottom: -35px;
 }

@@ -12,18 +12,41 @@ function TopNav() {
 
   return (
     <div className="topnav">
-      <button className="nav-button">
-        <FiGlobe className="icon" />
-        <span>Language</span>
-      </button>
-      <button className="nav-button theme-toggle" onClick={toggleTheme}>
-        {isDarkTheme ? <FiSun className="icon" /> : <FiMoon className="icon" />}
-        <span>{isDarkTheme ? "Light Mode" : "Dark Mode"}</span>
-      </button>
-      <button className="nav-button">
-        <FiUser className="icon" />
-        <span>Account</span>
-      </button>
+      <div>
+        <button
+          className="nav-button"
+          title="Change Language"
+          aria-label="Change Language"
+        >
+          <FiGlobe className="icon" />
+          <span className="tooltip">Language</span>
+        </button>
+        <button
+          className="nav-button theme-toggle"
+          onClick={toggleTheme}
+          title={isDarkTheme ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          aria-label={
+            isDarkTheme ? "Switch to Light Mode" : "Switch to Dark Mode"
+          }
+        >
+          {isDarkTheme ? (
+            <FiSun className="icon" />
+          ) : (
+            <FiMoon className="icon" />
+          )}
+          <span className="tooltip">
+            {isDarkTheme ? "Light Mode" : "Dark Mode"}
+          </span>
+        </button>
+        <button
+          className="nav-button"
+          title="Account Settings"
+          aria-label="Account Settings"
+        >
+          <FiUser className="icon" />
+          <span className="tooltip">Account</span>
+        </button>
+      </div>
     </div>
   );
 }

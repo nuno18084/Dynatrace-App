@@ -46,10 +46,10 @@
 
 /* When sidebar is open */
 .layout:not(.sidebar-collapsed) .main-content {
-  margin-left: 100px;
+  margin-left: 70px;
 }
 
 /* When sidebar is collapsed */
 .layout.sidebar-collapsed .main-content {
-  margin-left: 60px;
+  margin-left: 30px;
 }
