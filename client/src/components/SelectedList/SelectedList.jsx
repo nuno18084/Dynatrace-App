@@ -1,4 +1,4 @@
-import "./SelectedList.css";
+import "../SideNav/SideNav.css";
 
 const SelectedList = ({
   headers = [],
@@ -7,6 +7,7 @@ const SelectedList = ({
   collapsed = false,
   showAllColumns = false,
   title = "Select Columns:",
+  className = "",
 }) => {
   const visibleHeaders = showAllColumns ? headers : headers.slice(0, 5);
   const allSelected = headers.every((header) =>
@@ -27,7 +28,7 @@ const SelectedList = ({
     <div
       className={`column-selector ${collapsed ? "hide-columns" : ""} ${
         showAllColumns ? "expanded" : ""
-      }`}
+      } ${className}`}
     >
       <h2 className="column-selector-title">{title}</h2>
       <div className="checkbox-grid">

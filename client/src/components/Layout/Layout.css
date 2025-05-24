@@ -1,0 +1,55 @@
+.layout {
+  display: grid;
+  grid-template-areas:
+    "topnav topnav"
+    "sidenav main";
+  grid-template-columns: 250px 1fr;
+  grid-template-rows: 50px 1fr;
+  min-height: 100vh;
+  background-color: var(--background-primary);
+  width: 100%;
+  position: relative;
+}
+
+.layout.sidebar-collapsed {
+  grid-template-columns: 60px 1fr;
+}
+
+.main-content {
+  grid-area: main;
+  padding: 1rem 2rem;
+  overflow-y: auto;
+  height: calc(100vh - 50px); /* Subtract TopNav height */
+  background-color: var(--background-primary);
+  margin-left: 0; /* Reset margin */
+  transition: margin-left 0.3s ease; /* Add transition */
+}
+
+/* Scrollbar styles for main content */
+.main-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+  background: var(--background-primary);
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* When sidebar is open */
+.layout:not(.sidebar-collapsed) .main-content {
+  margin-left: 100px;
+}
+
+/* When sidebar is collapsed */
+.layout.sidebar-collapsed .main-content {
+  margin-left: 60px;
+}

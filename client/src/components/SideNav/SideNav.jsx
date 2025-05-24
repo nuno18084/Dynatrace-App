@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { NavLink } from "react-router-dom";
 import useSidebarCollapse from "../../Hooks/useSidebarCollapse";
 import useShowAllColumns from "../../Hooks/useShowAllColumns";
 import "./SideNav.css";
@@ -20,17 +21,21 @@ import {
   FiChevronUp,
 } from "react-icons/fi";
 
-function SideNav({ headers }) {
+function SideNav() {
   const { collapsed, toggleSidebar } = useSidebarCollapse(false);
   const { showAllColumns, toggleShowColumns } = useShowAllColumns();
   const { filters, setEnv, setApi, setColumns } = useFilters();
 
   useEffect(() => {
     const body = document.body;
+    const layout = document.querySelector(".layout");
+
     if (!collapsed) {
       body.classList.add("navbar-open");
+      layout?.classList.remove("sidebar-collapsed");
     } else {
       body.classList.remove("navbar-open");
+      layout?.classList.add("sidebar-collapsed");
     }
   }, [collapsed]);
 
@@ -101,7 +106,7 @@ function SideNav({ headers }) {
     });
 
     if (val === "ALL_SELECT") {
-      const toSelect = affectedHeaders || headers;
+      const toSelect = affectedHeaders || [];
       console.log("Selecting all columns:", toSelect);
       setColumns(toSelect);
     } else if (val === "ALL_DESELECT") {
@@ -127,22 +132,22 @@ function SideNav({ headers }) {
         </div>
 
         <nav className="sidebar-menu">
-          <a href="/" className="sidebar-link">
+          <NavLink to="/home" className="sidebar-link">
             <FiHome className="icon" />
             <span className="link-text">Home</span>
-          </a>
-          <a href="/about" className="sidebar-link">
+          </NavLink>
+          <NavLink to="/about" className="sidebar-link">
             <FiInfo className="icon" />
             <span className="link-text">About</span>
-          </a>
-          <a href="/services" className="sidebar-link">
+          </NavLink>
+          <NavLink to="/services" className="sidebar-link">
             <FiSettings className="icon" />
             <span className="link-text">Services</span>
-          </a>
-          <a href="/contact" className="sidebar-link">
+          </NavLink>
+          <NavLink to="/contact" className="sidebar-link">
             <FiMail className="icon" />
             <span className="link-text">Contact</span>
-          </a>
+          </NavLink>
         </nav>
 
         <EnvSelector
@@ -156,6 +161,7 @@ function SideNav({ headers }) {
           collapsed={collapsed}
           showAllColumns={true}
           title="Environment"
+          className="env-selector"
         />
 
         <APISelector
@@ -169,18 +175,20 @@ function SideNav({ headers }) {
           collapsed={collapsed}
           showAllColumns={true}
           title="API"
+          className="api-selector"
         />
 
         <ColumnSelector
-          headers={headers}
-          selectedColumns={filters.columns}
+          headers={filters.columns || []}
+          selectedColumns={filters.columns || []}
           handleColumnSelect={handleColumnsSelect}
           collapsed={collapsed}
           showAllColumns={showAllColumns}
           title="Select Columns"
+          className="columns-selector"
         />
 
-        {headers.length > 5 && !collapsed && (
+        {(filters.columns || []).length > 5 && !collapsed && (
           <button className="toggle-columns-btn" onClick={toggleShowColumns}>
             {showAllColumns ? <FiChevronUp /> : <FiChevronDown />}
           </button>

@@ -1,116 +1,160 @@
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 50px; /* TopNav height */
   left: 0;
-  height: 100vh;
+  height: calc(100vh - 50px);
   width: 250px;
-  background-color: #1c1c1c;
-  color: #e0e0e0;
+  background-color: var(--background-secondary);
+  border-right: 1px solid var(--border-color);
+  transition: width 0.3s ease;
   display: flex;
   flex-direction: column;
-  transition: width 0.3s ease;
-  z-index: 1000;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+  grid-area: sidenav;
+  z-index: 100;
 }
 
 .sidebar.collapsed {
   width: 60px;
+  overflow: hidden;
+}
+
+.sidebar-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 0;
 }
 
 .sidebar-header {
-  position: sticky;
-  top: 0;
-  background-color: #1c1c1c;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
-  z-index: 1;
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+  min-height: 40px; /* Match logo height */
 }
 
 .logo-img {
-  height: 50px;
-  width: 90px;
-  margin-left: -10px;
-  margin-top: 5px;
-  transition: opacity 0.3s ease;
+  height: 40px;
+  transition: all 0.3s ease;
 }
 
-.sidebar.collapsed .logo-img {
+.collapsed .logo-img {
+  height: 30px;
   display: none;
-  opacity: 0;
 }
 
 .collapse-btn {
   background: none;
   border: none;
-  color: #e0e0e0;
-  font-size: 1.5rem;
+  color: var(--text-secondary);
   cursor: pointer;
-  padding: 8px;
-  margin-top: 15px;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 32px;
+  outline: none;
 }
 
-.collapse-btn:focus,
-.collapse-btn:active {
+.collapse-btn:focus {
   outline: none;
-  border: none;
+}
+
+.sidebar.collapsed .collapse-btn {
+  margin: 0 auto;
+  transform: rotate(180deg);
 }
 
 .collapse-btn:hover {
-  color: #029e7a;
+  color: var(--text-primary);
 }
 
 .sidebar-menu {
-  display: flex;
-  flex-direction: column;
-  margin-top: 10px;
+  margin-bottom: 2rem;
 }
 
 .sidebar-link {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
-  color: #e0e0e0;
+  padding: 0.75rem 1rem;
+  color: var(--text-secondary);
   text-decoration: none;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  gap: 1rem;
+  white-space: nowrap;
 }
 
 .sidebar-link:hover {
-  background-color: #029e7a;
-  color: #ffffff;
+  color: var(--text-primary);
+  background-color: var(--background-hover);
 }
 
-.icon {
+.sidebar-link.active {
+  color: #029e7a;
+  background-color: var(--background-hover);
+}
+
+.sidebar-link .icon {
   font-size: 1.2rem;
-  margin-right: 10px;
-  flex-shrink: 0;
+  min-width: 24px;
 }
 
-.link-text {
-  transition: opacity 0.3s ease;
+.collapsed .link-text {
+  display: none;
 }
 
-.sidebar.collapsed .link-text {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
+.apply-button-container {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
 }
 
-.column-selector {
-  padding: 16px;
-  overflow-y: hidden;
-  flex-grow: 1;
-  max-height: 210px;
+/* Tooltip for collapsed state */
+.collapsed .sidebar-link {
   position: relative;
-  padding-right: 10px;
-  padding-bottom: 30px;
+  padding: 0.75rem;
+  justify-content: center;
+}
+
+.collapsed .sidebar-link:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--background-secondary);
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  z-index: 1000;
+  margin-left: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Column selector styles */
+.column-selector {
+  padding: 1rem;
+  overflow-y: hidden;
+  position: relative;
+  background-color: var(--background-secondary);
+  border-bottom: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.sidebar.collapsed .column-selector {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .column-selector-title {
-  font-size: 1rem;
-  margin-bottom: 8px;
-  color: #fffefe;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .column-selector.expanded {
@@ -125,7 +169,11 @@
   left: 0;
   right: 0;
   height: 30px;
-  background: linear-gradient(to bottom, transparent, #1c1c1c);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--background-secondary)
+  );
   pointer-events: none;
   transition: opacity 0.3s;
   z-index: 1;
@@ -135,72 +183,64 @@
   opacity: 0;
 }
 
-.column-list {
+.checkbox-grid {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
 }
 
 .checkbox-item {
-  font-size: 0.9rem;
   display: flex;
   align-items: center;
-  color: #e0e0e0;
-  gap: 6px;
+  gap: 0.75rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  padding: 0.25rem 0;
+  white-space: nowrap;
 }
 
-.checkbox-item input {
+.checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
   accent-color: #029e7a;
+  cursor: pointer;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.checkbox-item label {
+  cursor: pointer;
+  user-select: none;
+  font-weight: 500;
 }
 
 .hide-columns {
   display: none;
 }
 
-.sidebar-scrollable {
-  overflow-y: auto;
-  height: calc(100% - 60px);
-}
-
-body.navbar-open {
-  overflow-y: hidden;
-}
-
-.checkbox-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
 .toggle-columns-btn {
   background: none;
   border: none;
-  color: #e0e0e0;
+  color: var(--text-secondary);
   font-size: 1.2rem;
   cursor: pointer;
-  margin: 10px auto 0 auto;
+  margin: 10px auto 0;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.2s ease;
-}
-
-.toggle-columns-btn:active,
-.toggle-columns-btn:focus {
-  outline: none;
+  padding: 0.5rem;
 }
 
 .toggle-columns-btn:hover {
-  color: #ffffff;
+  color: var(--text-primary);
   transform: scale(1.1);
 }
 
-/* Apply button styles */
-.apply-button-container {
-  background-color: #1c1c1c;
-  border-top: 1px solid #333;
-  padding: 12px;
-  height: 60px;
+.toggle-columns-btn:focus {
+  outline: none;
 }
 
 .sidebar.collapsed .apply-button-container {
@@ -217,4 +257,13 @@ body.navbar-open {
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.apply-button-container button:hover {
+  background-color: #02b88d;
+}
+
+body.navbar-open {
+  overflow-y: hidden;
 }

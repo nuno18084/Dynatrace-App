@@ -11,47 +11,59 @@ export const useFetchData = (
 ) => {
   return useCallback(
     async (page) => {
+      console.log("Fetching data for page:", page);
       try {
-        setLoading(true);
         const response = await api.get("/api/data", {
           params: {
-            page: page,
+            page,
             per_page: 50,
             columns: selectedColumns,
           },
         });
 
+        console.log("API Response:", response.data);
         const { entities, currentPage, totalPages } = response.data;
 
+        if (!entities || entities.length === 0) {
+          console.log("No entities returned");
+          return { currentPage: page, hasMore: false };
+        }
+
         if (page === 1) {
+          console.log("Setting initial data");
           setData(entities);
           if (entities && entities.length > 0) {
             const dynamicHeaders = Object.keys(entities[0]);
             setHeaders(dynamicHeaders);
-            if (!selectedColumns.length) {
+            if (!selectedColumns || selectedColumns.length === 0) {
               setSelectedColumns(dynamicHeaders);
             }
           }
         } else {
-          setData((prevData) => [...prevData, ...entities]);
+          console.log("Appending data, current page:", page);
+          setData((prevData) => {
+            const newData = [...prevData, ...entities];
+            console.log("New data length:", newData.length);
+            return newData;
+          });
         }
 
-        return { currentPage, hasMore: currentPage < totalPages };
+        const hasMore = currentPage < totalPages;
+        console.log(
+          "Has more data:",
+          hasMore,
+          "Current page:",
+          currentPage,
+          "Total pages:",
+          totalPages
+        );
+        return { currentPage, hasMore, totalPages };
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err.message || "Error loading data");
-        return { error: true };
-      } finally {
-        setLoading(false);
+        return { error: true, currentPage: page, hasMore: false };
       }
     },
-    [
-      setData,
-      setLoading,
-      setHeaders,
-      setSelectedColumns,
-      setError,
-      selectedColumns,
-    ]
+    [selectedColumns, setData, setHeaders, setSelectedColumns, setError]
   );
 };

@@ -1,20 +1,58 @@
-/* Contêiner da tabela com rolagem horizontal e vertical */
+/* Container da tabela com rolagem horizontal e vertical */
 .table-container {
   width: 100%;
-  max-width: 1400px;
+  max-width: 100%;
   margin: 0 auto;
+  padding: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-top: 20px;
+  background-color: var(--background-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 200px); /* Account for top nav, title, and padding */
 }
 
 .table-wrapper {
   width: 100%;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: auto;
   max-height: calc(100vh - 250px);
-  background-color: #1f1f1f;
+  position: relative;
   border-radius: 4px;
+  background-color: var(--background-secondary);
+}
+
+/* Hide scrollbars by default for Chrome/Safari/Edge */
+.table-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+/* Show scrollbars on hover for Chrome/Safari/Edge */
+.table-wrapper:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.table-wrapper:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Show scrollbars on hover for Firefox */
+.table-wrapper:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
 }
 
 /* When navbar is open, adjust the table margin */
@@ -25,49 +63,36 @@ body.navbar-open .table-container {
 table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #1f1f1f;
-  color: #e0e0e0;
-}
-
-thead {
-  position: sticky;
-  top: 0;
-  background-color: #1f1f1f;
-  z-index: 1;
-}
-
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #333;
+  background-color: var(--background-secondary);
 }
 
 th {
-  background-color: #252525;
-  font-weight: 500;
-  color: #029e7a;
+  background-color: var(--background-secondary);
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 td {
   padding: 12px;
-  border: 1px solid #333;
-  color: #ffffff;
-}
-
-tr:nth-child(even) {
-  background-color: #2a2a2a;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
 tr:hover {
-  background-color: #252525;
+  background-color: var(--background-hover);
 }
 
-tr.selected {
+.selected {
   background-color: rgba(2, 158, 122, 0.1);
 }
 
-tr.selected:hover {
+.selected:hover {
   background-color: rgba(2, 158, 122, 0.15);
 }
 
@@ -77,43 +102,127 @@ input[type="checkbox"] {
   height: 16px;
   cursor: pointer;
   accent-color: #029e7a;
+  border-radius: 3px;
+  border: 1px solid var(--border-color);
 }
 
 /* First column (checkbox column) styling */
 th:first-child,
 td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
   width: 40px;
   text-align: center;
-  padding: 8px;
+  padding: 8px 16px;
+  background-color: var(--background-secondary);
+}
+
+th:first-child {
+  z-index: 3;
 }
 
 /* Nested object styling */
 td div {
-  margin: 2px 0;
-  padding: 2px 0;
-  border-bottom: 1px solid #333;
+  margin: 4px 0;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 td div:last-child {
   border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .loading-more {
   text-align: center;
-  padding: 10px;
+  padding: 16px;
   font-style: italic;
-  color: #ffffff;
-  background-color: #1f1f1f;
-  margin-bottom: 16px;
+  color: var(--text-secondary);
+  background-color: var(--background-secondary);
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
 }
 
-/* Ensure table actions are visible and properly positioned */
+/* Table actions */
 .table-actions {
   position: sticky;
   bottom: 0;
-  background-color: #1c1c1c;
+  background-color: var(--background-secondary);
   padding: 16px;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-  margin-top: auto;
-  z-index: 10;
+  border-top: 1px solid var(--border-color);
+  z-index: 2;
+  border-radius: 0 0 8px 8px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 100%;
+}
+
+.export-button {
+  min-width: 150px;
+  justify-content: center;
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  background-color: var(--background-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.load-more-button {
+  padding: 8px 16px;
+  background-color: #029e7a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.load-more-button:hover {
+  background-color: #02b88d;
+}
+
+.load-more-button:disabled {
+  background-color: var(--background-hover);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  background-color: var(--background-secondary);
+  border-top: 1px solid var(--border-color);
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  z-index: 5;
+}
+
+.loading-indicator::after {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--text-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

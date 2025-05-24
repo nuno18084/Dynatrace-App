@@ -1,82 +1,51 @@
-.top-nav {
+.topnav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 50px;
-  background-color: transparent;
-  z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.top-nav-content {
+  background-color: var(--background-secondary);
+  border-bottom: 1px solid var(--border-color);
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-  padding: 0 20px;
-}
-
-.top-nav-buttons {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-right: 40px;
+  padding: 0 2rem;
+  gap: 1rem;
+  z-index: 1000;
+  grid-area: topnav;
 }
 
 .nav-button {
   background: none;
   border: none;
-  color: #e0e0e0;
-  font-size: 1.2rem;
-  padding: 8px;
+  color: var(--text-secondary);
+  padding: 0.5rem;
   cursor: pointer;
-  border-radius: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  width: 36px;
-  height: 36px;
-  position: relative;
-}
-
-.nav-button::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: -35px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.nav-button:hover::after {
-  opacity: 1;
-  visibility: visible;
-  bottom: -30px;
+  gap: 0.5rem;
+  font-size: 1rem;
+  transition: color 0.2s ease;
 }
 
 .nav-button:hover {
-  background-color: #333;
-  color: #029e7a;
-  transform: scale(1.05);
+  color: var(--text-primary);
 }
 
-.nav-button:active {
-  background-color: #444;
-  transform: scale(0.95);
+.nav-button .icon {
+  font-size: 1.2rem;
 }
 
-.nav-icon {
-  width: 20px;
-  height: 20px;
+/* Theme toggle animation */
+.theme-toggle {
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle .icon {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.theme-toggle:hover .icon {
+  transform: rotate(360deg);
 }

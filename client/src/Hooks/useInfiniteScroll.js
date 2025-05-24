@@ -1,9 +1,13 @@
 import { useCallback } from "react";
 
 export const useInfiniteScroll = (loading, hasMore, currentPage, fetchData) => {
-  return useCallback(() => {
+  return useCallback(async () => {
     if (!loading && hasMore) {
-      fetchData(currentPage + 1);
+      try {
+        await fetchData(currentPage + 1);
+      } catch (error) {
+        console.error("Error loading more data:", error);
+      }
     }
   }, [loading, hasMore, currentPage, fetchData]);
 };
