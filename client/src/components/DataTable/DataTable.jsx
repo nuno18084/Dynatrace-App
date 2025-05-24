@@ -1,6 +1,7 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import "./DataTable.css";
 import TableActions from "../Table/TableActions";
+import SearchBar from "../SearchBar/SearchBar";
 
 const DataTable = ({
   data = [],
@@ -9,7 +10,27 @@ const DataTable = ({
   hasMore,
 }) => {
   const [selectedRows, setSelectedRows] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const observerTarget = useRef(null);
+
+  const filteredData = useMemo(() => {
+    if (!searchQuery) return data;
+
+    return data.filter((item) => {
+      return selectedColumns.some((col) => {
+        const value = item[col];
+        if (value == null) return false;
+
+        if (typeof value === "object") {
+          return JSON.stringify(value)
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase());
+        }
+
+        return String(value).toLowerCase().includes(searchQuery.toLowerCase());
+      });
+    });
+  }, [data, searchQuery, selectedColumns]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -43,13 +64,17 @@ const DataTable = ({
     });
   };
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
   const handleExportSelected = (selectedData) => {
     const csvContent = generateCSV(selectedData, selectedColumns);
     downloadCSV(csvContent, "selected_data.csv");
   };
 
   const handleExportAll = () => {
-    const csvContent = generateCSV(data, selectedColumns);
+    const csvContent = generateCSV(filteredData, selectedColumns);
     downloadCSV(csvContent, "all_data.csv");
   };
 
@@ -98,6 +123,7 @@ const DataTable = ({
 
   return (
     <div className="table-container">
+      <SearchBar onSearch={handleSearch} />
       <div className="table-wrapper">
         <table>
           <thead>
@@ -106,9 +132,9 @@ const DataTable = ({
                 <input
                   type="checkbox"
                   onChange={(e) =>
-                    setSelectedRows(e.target.checked ? data : [])
+                    setSelectedRows(e.target.checked ? filteredData : [])
                   }
-                  checked={selectedRows.length === data.length}
+                  checked={selectedRows.length === filteredData.length}
                 />
               </th>
               {selectedColumns.map((col) => (
@@ -117,7 +143,7 @@ const DataTable = ({
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => (
+            {filteredData.map((item, index) => (
               <tr
                 key={item.entityId || index}
                 className={
