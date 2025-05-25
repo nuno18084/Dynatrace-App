@@ -127,3 +127,39 @@
   visibility: visible;
   bottom: -35px;
 }
+
+.lang-dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.lang-menu {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  z-index: 1200;
+  min-width: 120px;
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lang-menu button {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  padding: 0.5rem 1.2rem;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.lang-menu button:hover {
+  background: var(--background-hover);
+  color: #029e7a;
+}
