@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./Layout/Layout";
-import { Home, About, Services, Contact } from "./pages";
+import { Home, Charts, Services, Contact } from "./pages";
 import "./App.css";
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/home" replace />} />
           <Route path="home" element={<Home />} />
-          <Route path="about" element={<About />} />
+          <Route path="charts" element={<Charts />} />
           <Route path="services" element={<Services />} />
           <Route path="contact" element={<Contact />} />
           <Route path="*" element={<Navigate to="/home" replace />} />

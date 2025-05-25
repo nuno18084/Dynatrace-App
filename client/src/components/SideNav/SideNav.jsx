@@ -136,9 +136,9 @@ function SideNav() {
             <FiHome className="icon" />
             <span className="link-text">Home</span>
           </NavLink>
-          <NavLink to="/about" className="sidebar-link">
+          <NavLink to="/charts" className="sidebar-link">
             <FiInfo className="icon" />
-            <span className="link-text">About</span>
+            <span className="link-text">Charts</span>
           </NavLink>
           <NavLink to="/services" className="sidebar-link">
             <FiSettings className="icon" />
