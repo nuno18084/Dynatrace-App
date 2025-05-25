@@ -12,7 +12,7 @@ import { useFilters } from "../../Hooks/useFilters";
 // import { downloadCSV } from "../../utils/downloadCSV";
 import {
   FiHome,
-  FiInfo,
+  FiBarChart2,
   FiSettings,
   FiMail,
   FiChevronsLeft,
@@ -137,7 +137,7 @@ function SideNav() {
             <span className="link-text">Home</span>
           </NavLink>
           <NavLink to="/charts" className="sidebar-link">
-            <FiInfo className="icon" />
+            <FiBarChart2 className="icon" />
             <span className="link-text">Charts</span>
           </NavLink>
           <NavLink to="/services" className="sidebar-link">
