@@ -50,10 +50,25 @@
   font-size: 1rem;
   transition: color 0.2s ease;
   position: relative;
+  outline: none;
 }
 
 .nav-button:hover {
   color: var(--text-primary);
+}
+
+.nav-button:focus,
+.nav-button:active {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.nav-button .icon:focus,
+.nav-button .icon:active {
+  outline: none;
+  border: none;
+  box-shadow: none;
 }
 
 .nav-button .icon {

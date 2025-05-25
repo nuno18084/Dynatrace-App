@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import "./TopNav.css";
 import { FiUser, FiGlobe, FiSun, FiMoon } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 function TopNav() {
   const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const navigate = useNavigate();
 
   const toggleTheme = () => {
     setIsDarkTheme(!isDarkTheme);
@@ -42,6 +44,7 @@ function TopNav() {
           className="nav-button"
           title="Account Settings"
           aria-label="Account Settings"
+          onClick={() => navigate("/account")}
         >
           <FiUser className="icon" />
           <span className="tooltip">Account</span>
