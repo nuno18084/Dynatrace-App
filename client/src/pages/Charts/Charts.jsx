@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./Charts.css";
-import { Bar, Doughnut, Line, PolarArea } from "react-chartjs-2";
+import {
+  Bar,
+  Doughnut,
+  Line,
+  PolarArea,
+  Pie,
+  Radar,
+  Scatter,
+  Bubble,
+} from "react-chartjs-2";
 import {
   Chart as ChartJS,
   BarElement,
@@ -13,7 +22,9 @@ import {
   LineElement,
   PointElement,
   RadialLinearScale,
+  Filler,
 } from "chart.js";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(
   BarElement,
@@ -25,14 +36,63 @@ ChartJS.register(
   ArcElement,
   LineElement,
   PointElement,
-  RadialLinearScale
+  RadialLinearScale,
+  Filler
 );
+
+// Helper for custom background plugin
+const customCanvasBackgroundColor = {
+  id: "customCanvasBackgroundColor",
+  beforeDraw: (chart) => {
+    const { ctx, config } = chart;
+    const color =
+      config.options.plugins &&
+      config.options.plugins.customCanvasBackgroundColor &&
+      config.options.plugins.customCanvasBackgroundColor.color
+        ? config.options.plugins.customCanvasBackgroundColor.color
+        : "#fff";
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  },
+};
 
 function Charts() {
   const [chartData, setChartData] = useState(null);
   const [doughnutData, setDoughnutData] = useState(null);
   const [lineData, setLineData] = useState(null);
   const [polarData, setPolarData] = useState(null);
+  const [pieData, setPieData] = useState(null);
+  const [radarData, setRadarData] = useState(null);
+  const [scatterData, setScatterData] = useState(null);
+  const [bubbleData, setBubbleData] = useState(null);
+  const { t } = useTranslation();
+
+  // Reactively track dark mode
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof document !== "undefined") {
+      return !document.body.classList.contains("light-theme");
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    // Watch for changes to the body's class list
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(!document.body.classList.contains("light-theme"));
+    });
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const chartBgColor = isDarkMode ? "#23272f" : "#fff";
+  const cardBgColor = isDarkMode ? "#1c1c1c" : "#fff";
+  const fontColor = isDarkMode ? "#fff" : "#23272f";
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/api/data?page=1&per_page=10")
@@ -47,7 +107,7 @@ function Charts() {
           labels,
           datasets: [
             {
-              label: "CPU Usage (%)",
+              label: t("CPU Usage (%)"),
               data: cpuUsages,
               backgroundColor: "rgba(54, 162, 235, 0.5)",
               borderColor: "rgba(54, 162, 235, 1)",
@@ -55,7 +115,6 @@ function Charts() {
             },
           ],
         });
-
         // Doughnut chart: Entity Type Distribution
         const typeCounts = {};
         data.entities.forEach((entity) => {
@@ -82,7 +141,6 @@ function Charts() {
             },
           ],
         });
-
         // Line chart: Memory Usage by Entity
         const memoryUsages = data.entities.map(
           (entity) => entity["metrics.memory_usage"]
@@ -91,16 +149,15 @@ function Charts() {
           labels,
           datasets: [
             {
-              label: "Memory Usage (%)",
+              label: t("Memory Usage (%)"),
               data: memoryUsages,
-              fill: false,
+              fill: true,
               borderColor: "rgba(255, 99, 132, 1)",
               backgroundColor: "rgba(255, 99, 132, 0.2)",
               tension: 0.3,
             },
           ],
         });
-
         // Polar Area chart: Status Distribution
         const statusCounts = {};
         data.entities.forEach((entity) => {
@@ -127,91 +184,277 @@ function Charts() {
             },
           ],
         });
+        // Pie chart: Distribution by Environment (from tag_env)
+        const envCounts = {};
+        data.entities.forEach((entity) => {
+          const env = entity.tag_env || "Unknown";
+          envCounts[env] = (envCounts[env] || 0) + 1;
+        });
+        setPieData({
+          labels: Object.keys(envCounts),
+          datasets: [
+            {
+              data: Object.values(envCounts),
+              backgroundColor: [
+                "rgba(153, 102, 255, 0.5)",
+                "rgba(255, 159, 64, 0.5)",
+                "rgba(255, 99, 132, 0.5)",
+                "rgba(54, 162, 235, 0.5)",
+              ],
+              borderColor: [
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        });
+        // Radar chart: Apdex, Availability, Error Rate by Entity
+        const apdex = data.entities.map(
+          (entity) => entity["metrics.apdex_score"]
+        );
+        const availability = data.entities.map(
+          (entity) => entity["metrics.availability"]
+        );
+        const errorRate = data.entities.map(
+          (entity) => entity["metrics.error_rate"]
+        );
+        setRadarData({
+          labels,
+          datasets: [
+            {
+              label: t("Apdex Score"),
+              data: apdex,
+              backgroundColor: "rgba(54, 162, 235, 0.2)",
+              borderColor: "rgba(54, 162, 235, 1)",
+              pointBackgroundColor: "rgba(54, 162, 235, 1)",
+            },
+            {
+              label: t("Availability"),
+              data: availability,
+              backgroundColor: "rgba(75, 192, 192, 0.2)",
+              borderColor: "rgba(75, 192, 192, 1)",
+              pointBackgroundColor: "rgba(75, 192, 192, 1)",
+            },
+            {
+              label: t("Error Rate"),
+              data: errorRate,
+              backgroundColor: "rgba(255, 99, 132, 0.2)",
+              borderColor: "rgba(255, 99, 132, 1)",
+              pointBackgroundColor: "rgba(255, 99, 132, 1)",
+            },
+          ],
+        });
+        // Scatter chart: CPU vs Memory Usage
+        setScatterData({
+          datasets: [
+            {
+              label: t("CPU vs Memory Usage"),
+              data: data.entities.map((entity) => ({
+                x: entity["metrics.cpu_usage"],
+                y: entity["metrics.memory_usage"],
+              })),
+              backgroundColor: "rgba(255, 206, 86, 0.7)",
+            },
+          ],
+        });
+        // Bubble chart: Requests per Minute vs Error Count (bubble size = active sessions)
+        setBubbleData({
+          datasets: [
+            {
+              label: t("Requests/Error/Active Sessions"),
+              data: data.entities.map((entity) => ({
+                x: entity["metrics.requests_per_minute"],
+                y: entity["metrics.error_count"],
+                r: Math.max(
+                  5,
+                  Math.sqrt(entity["metrics.active_sessions"] || 1)
+                ),
+              })),
+              backgroundColor: "rgba(54, 162, 235, 0.5)",
+            },
+          ],
+        });
       });
-  }, []);
+  }, [t]);
 
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: { position: "top" },
-      title: { display: true, text: "CPU Usage by Entity" },
-    },
-  };
-
-  const doughnutOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: "top" },
-      title: { display: true, text: "Entity Type Distribution" },
-    },
-  };
-
-  const lineOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: "top" },
-      title: { display: true, text: "Memory Usage by Entity" },
-    },
-  };
-
-  const polarOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: "top" },
-      title: { display: true, text: "Status Distribution" },
-    },
+  // Chart options (reuse for brevity, customize as needed)
+  const baseOptions = (title, hasAxes = true) => {
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: { position: "top", labels: { color: fontColor } },
+        title: { display: true, text: title, color: fontColor },
+      },
+    };
+    if (hasAxes) {
+      options.scales = {
+        x: { ticks: { color: fontColor }, grid: { color: "#eee" } },
+        y: { ticks: { color: fontColor }, grid: { color: "#eee" } },
+      };
+    }
+    return options;
   };
 
   return (
-    <div className="about">
-      <h1 className="title">Charts</h1>
-      <div className="content">
-        <h2>Dynatrace Data Visualization</h2>
-        {/* <p>
-          This application provides a comprehensive visualization of Dynatrace
-          data, allowing users to explore and analyze various metrics and
-          information across different environments and APIs.
-        </p> */}
-        {/* <h3>Features</h3> */}
-        {/* <ul>
-          <li>Real-time data visualization</li>
-          <li>Environment and API filtering</li>
-          <li>Column customization</li>
-          <li>Data export capabilities</li>
-          <li>Infinite scroll pagination</li>
-          <li>Dark/Light theme support</li>
-        </ul> */}
-        <div className="charts-row">
-          <div className="chart-item">
-            {chartData ? (
-              <Bar data={chartData} options={options} />
-            ) : (
-              <p>Loading bar chart...</p>
-            )}
-          </div>
-          <div className="chart-item">
-            {lineData ? (
-              <Line data={lineData} options={lineOptions} />
-            ) : (
-              <p>Loading line chart...</p>
-            )}
-          </div>
+    <div className="charts-page">
+      <h1 className="title">{t("Charts")}</h1>
+      <div className="charts-grid">
+        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+          {chartData &&
+          chartData.datasets &&
+          chartData.datasets[0].data.length > 0 ? (
+            <Bar
+              data={chartData}
+              options={{
+                ...baseOptions(t("CPU Usage by Entity"), true),
+                plugins: {
+                  ...baseOptions(t("CPU Usage by Entity"), true).plugins,
+                  customCanvasBackgroundColor: { color: chartBgColor },
+                },
+              }}
+              plugins={[customCanvasBackgroundColor]}
+            />
+          ) : (
+            <div className="no-data">{t("No data available")}</div>
+          )}
         </div>
-        <div className="charts-row">
-          <div className="chart-item">
-            {doughnutData ? (
-              <Doughnut data={doughnutData} options={doughnutOptions} />
-            ) : (
-              <p>Loading doughnut chart...</p>
-            )}
-          </div>
-          <div className="chart-item">
-            {polarData ? (
-              <PolarArea data={polarData} options={polarOptions} />
-            ) : (
-              <p>Loading polar area chart...</p>
-            )}
-          </div>
+        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+          {lineData &&
+          lineData.datasets &&
+          lineData.datasets[0].data.length > 0 ? (
+            <Line
+              data={lineData}
+              options={{
+                ...baseOptions(t("Memory Usage by Entity"), true),
+                plugins: {
+                  ...baseOptions(t("Memory Usage by Entity"), true).plugins,
+                  customCanvasBackgroundColor: { color: chartBgColor },
+                },
+              }}
+              plugins={[customCanvasBackgroundColor]}
+            />
+          ) : (
+            <div className="no-data">{t("No data available")}</div>
+          )}
+        </div>
+        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+          {doughnutData &&
+          doughnutData.datasets &&
+          doughnutData.datasets[0].data.length > 0 ? (
+            <Doughnut
+              data={doughnutData}
+              options={{
+                ...baseOptions(t("Entity Type Distribution"), false),
+                plugins: {
+                  ...baseOptions(t("Entity Type Distribution"), false).plugins,
+                  customCanvasBackgroundColor: { color: chartBgColor },
+                },
+              }}
+              plugins={[customCanvasBackgroundColor]}
+            />
+          ) : (
+            <div className="no-data">{t("No data available")}</div>
+          )}
+        </div>
+        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+          {pieData &&
+          pieData.datasets &&
+          pieData.datasets[0].data.length > 0 ? (
+            <Pie
+              data={pieData}
+              options={{
+                ...baseOptions(t("Environment Distribution"), false),
+                plugins: {
+                  ...baseOptions(t("Environment Distribution"), false).plugins,
+                  customCanvasBackgroundColor: { color: chartBgColor },
+                },
+              }}
+              plugins={[customCanvasBackgroundColor]}
+            />
+          ) : (
+            <div className="no-data">{t("No data available")}</div>
+          )}
+        </div>
+        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+          {polarData &&
+          polarData.datasets &&
+          polarData.datasets[0].data.length > 0 ? (
+            <PolarArea
+              data={polarData}
+              options={{
+                ...baseOptions(t("Status Distribution"), false),
+                plugins: {
+                  ...baseOptions(t("Status Distribution"), false).plugins,
+                  customCanvasBackgroundColor: { color: chartBgColor },
+                },
+              }}
+              plugins={[customCanvasBackgroundColor]}
+            />
+          ) : (
+            <div className="no-data">{t("No data available")}</div>
+          )}
+        </div>
+        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+          {radarData &&
+          radarData.datasets &&
+          radarData.datasets[0].data.length > 0 ? (
+            <Radar
+              data={radarData}
+              options={{
+                ...baseOptions(t("Apdex/Availability/Error Rate"), false),
+                plugins: {
+                  ...baseOptions(t("Apdex/Availability/Error Rate"), false)
+                    .plugins,
+                  customCanvasBackgroundColor: { color: chartBgColor },
+                },
+              }}
+              plugins={[customCanvasBackgroundColor]}
+            />
+          ) : (
+            <div className="no-data">{t("No data available")}</div>
+          )}
+        </div>
+        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+          {scatterData &&
+          scatterData.datasets &&
+          scatterData.datasets[0].data.length > 0 ? (
+            <Scatter
+              data={scatterData}
+              options={{
+                ...baseOptions(t("CPU vs Memory Usage"), true),
+                plugins: {
+                  ...baseOptions(t("CPU vs Memory Usage"), true).plugins,
+                  customCanvasBackgroundColor: { color: chartBgColor },
+                },
+              }}
+              plugins={[customCanvasBackgroundColor]}
+            />
+          ) : (
+            <div className="no-data">{t("No data available")}</div>
+          )}
+        </div>
+        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+          {bubbleData &&
+          bubbleData.datasets &&
+          bubbleData.datasets[0].data.length > 0 ? (
+            <Bubble
+              data={bubbleData}
+              options={{
+                ...baseOptions(t("Requests/Error/Active Sessions"), true),
+                plugins: {
+                  ...baseOptions(t("Requests/Error/Active Sessions"), true)
+                    .plugins,
+                  customCanvasBackgroundColor: { color: chartBgColor },
+                },
+              }}
+              plugins={[customCanvasBackgroundColor]}
+            />
+          ) : (
+            <div className="no-data">{t("No data available")}</div>
+          )}
         </div>
       </div>
     </div>
