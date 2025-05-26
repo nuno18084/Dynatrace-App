@@ -12,6 +12,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import useDarkMode from "../../Hooks/useDarkMode";
 import "./EntitySummaryCards.css";
 
 const ENTITY_TYPES = [
@@ -57,6 +58,7 @@ function EntitySummaryCards({ entities }) {
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalType, setModalType] = React.useState(null); // { entityType, metricType }
   const [modalEntities, setModalEntities] = React.useState([]);
+  const { isDarkMode, cardBgColor, fontColor } = useDarkMode();
 
   const handleOpenModal = (entityType, metricType) => {
     let details = [];
@@ -133,8 +135,21 @@ function EntitySummaryCards({ entities }) {
         onClose={handleCloseModal}
         maxWidth="md"
         fullWidth
+        PaperProps={{
+          sx: {
+            background: cardBgColor,
+            color: fontColor,
+          },
+        }}
       >
-        <DialogTitle>
+        <DialogTitle
+          sx={{
+            background: cardBgColor,
+            color: fontColor,
+            fontWeight: 700,
+            borderBottom: isDarkMode ? "1px solid #333" : "1px solid #eee",
+          }}
+        >
           {modalType &&
             `${
               ENTITY_TYPES.find((t) => t.key === modalType.entityType)?.label ||
@@ -147,12 +162,21 @@ function EntitySummaryCards({ entities }) {
           <IconButton
             aria-label="close"
             onClick={handleCloseModal}
-            sx={{ position: "absolute", right: 8, top: 8 }}
+            sx={{ position: "absolute", right: 8, top: 8, color: fontColor }}
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers style={{ maxHeight: 400, overflowY: "auto" }}>
+        <DialogContent
+          dividers
+          sx={{
+            background: cardBgColor,
+            color: fontColor,
+            maxHeight: 400,
+            overflowY: "auto",
+            borderTop: isDarkMode ? "1px solid #333" : "1px solid #eee",
+          }}
+        >
           {modalType?.metricType === "missing" && (
             <ul style={{ paddingLeft: 0, listStyle: "none" }}>
               {modalEntities.map((e, idx) => (
