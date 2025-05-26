@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import "./DataGovernance.css";
 import useDarkMode from "../../Hooks/useDarkMode";
+import DataQualityDashboard from "../../components/DataQualityDashboard/DataQualityDashboard";
+import AccessControlsTable from "../../components/AccessControlsTable/AccessControlsTable";
+import AuditLogsTable from "../../components/AuditLogsTable/AuditLogsTable";
+import RetentionPolicyEditor from "../../components/RetentionPolicyEditor/RetentionPolicyEditor";
 
 const TABS = [
   { key: "quality", label: "Data Quality" },
@@ -28,26 +32,10 @@ function DataGovernance() {
         ))}
       </div>
       <div className="tab-content">
-        {tab === "quality" && (
-          <div className="section-placeholder">
-            Data Quality Dashboard (charts, metrics, etc.)
-          </div>
-        )}
-        {tab === "access" && (
-          <div className="section-placeholder">
-            Access Controls Table (users, roles, permissions)
-          </div>
-        )}
-        {tab === "audit" && (
-          <div className="section-placeholder">
-            Audit Logs Table (user actions, filters)
-          </div>
-        )}
-        {tab === "retention" && (
-          <div className="section-placeholder">
-            Retention Policy Editor (editable list/table)
-          </div>
-        )}
+        {tab === "quality" && <DataQualityDashboard />}
+        {tab === "access" && <AccessControlsTable />}
+        {tab === "audit" && <AuditLogsTable />}
+        {tab === "retention" && <RetentionPolicyEditor />}
       </div>
     </div>
   );
