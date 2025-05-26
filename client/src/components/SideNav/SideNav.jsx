@@ -19,6 +19,7 @@ import {
   FiMenu,
   FiChevronDown,
   FiChevronUp,
+  FiLogOut,
 } from "react-icons/fi";
 
 function SideNav() {
@@ -194,7 +195,6 @@ function SideNav() {
           </button>
         )}
       </div>
-
       <div className="apply-button-container">
         <ApplyButton
           text="Apply"

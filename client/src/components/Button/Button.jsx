@@ -1,7 +1,7 @@
 import "./Button.css";
 import "../../App.css";
 
-const Button = ({ text, color, height, onClick }) => {
+const Button = ({ text, color, height, onClick, style }) => {
   return (
     <button
       className="download-btn"
@@ -9,6 +9,7 @@ const Button = ({ text, color, height, onClick }) => {
       style={{
         backgroundColor: color,
         height: height,
+        ...style,
       }}
     >
       <span style={{ display: "inline-block" }}>{text}</span>
