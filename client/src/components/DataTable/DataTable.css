@@ -64,11 +64,17 @@ table {
   width: 100%;
   border-collapse: collapse;
   background-color: var(--background-secondary);
+  table-layout: auto;
+}
+
+th,
+td {
+  white-space: nowrap;
 }
 
 th {
   background-color: var(--background-secondary);
-  padding: 12px;
+  padding: 14px 20px;
   text-align: left;
   font-weight: 600;
   color: var(--text-primary);
@@ -79,7 +85,7 @@ th {
 }
 
 td {
-  padding: 12px;
+  padding: 14px 20px;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-primary);
 }
