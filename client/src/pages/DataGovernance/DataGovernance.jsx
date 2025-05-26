@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./DataGovernance.css";
 import useDarkMode from "../../Hooks/useDarkMode";
 import DataQualityDashboard from "../../components/DataQualityDashboard/DataQualityDashboard";
-import AccessControlsTable from "../../components/AccessControlsTable/AccessControlsTable";
+import AccessControlsTable from "../../components/DataQualityDashboard/AccessControlsTable";
 import AuditLogsTable from "../../components/AuditLogsTable/AuditLogsTable";
 import RetentionPolicyEditor from "../../components/RetentionPolicyEditor/RetentionPolicyEditor";
 
