@@ -13,7 +13,7 @@ import { useFilters } from "../../Hooks/useFilters";
 import {
   FiHome,
   FiBarChart2,
-  FiSettings,
+  FiDatabase,
   FiMail,
   FiChevronsLeft,
   FiMenu,
@@ -141,8 +141,8 @@ function SideNav() {
             <span className="link-text">Charts</span>
           </NavLink>
           <NavLink to="/services" className="sidebar-link">
-            <FiSettings className="icon" />
-            <span className="link-text">Services</span>
+            <FiDatabase className="icon" />
+            <span className="link-text">Data Governance</span>
           </NavLink>
           <NavLink to="/contact" className="sidebar-link">
             <FiMail className="icon" />

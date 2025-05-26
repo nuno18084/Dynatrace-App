@@ -1,0 +1,88 @@
+.data-governance-page {
+  background: var(--background-primary);
+  color: var(--text-primary);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.data-governance-page .title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  border-bottom: 2px solid var(--background-secondary);
+  padding-bottom: 0.25rem;
+}
+
+.tab,
+.tab:focus,
+.tab:active,
+.tab.active:focus,
+.tab.active:active {
+  outline: none !important;
+}
+
+.tab {
+  background: var(--background-secondary);
+  border: none;
+  border-radius: 8px 8px 0 0;
+  padding: 0.85rem 2rem;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: color 0.2s, border-bottom 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.tab.active {
+  color: var(--success, #029e7a);
+  background: var(--background-secondary);
+}
+
+.tab.active::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: 0;
+  height: 4px;
+  border-radius: 2px 2px 0 0;
+  background: var(--success, #029e7a);
+  z-index: 2;
+  transition: background 0.2s;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tab.active {
+    filter: brightness(1.15);
+    background: var(--primary);
+  }
+}
+
+.tab-content {
+  background: var(--background-secondary);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  padding: 2rem;
+  min-height: 300px;
+  color: var(--text-primary);
+}
+
+.section-placeholder {
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 3rem 0;
+}
