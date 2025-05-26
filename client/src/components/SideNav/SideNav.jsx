@@ -140,7 +140,7 @@ function SideNav() {
             <FiBarChart2 className="icon" />
             <span className="link-text">Charts</span>
           </NavLink>
-          <NavLink to="/services" className="sidebar-link">
+          <NavLink to="/data-governance" className="sidebar-link">
             <FiDatabase className="icon" />
             <span className="link-text">Data Governance</span>
           </NavLink>
