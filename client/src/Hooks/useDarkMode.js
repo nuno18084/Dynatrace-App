@@ -19,7 +19,7 @@ const useDarkMode = () => {
     return () => observer.disconnect();
   }, []);
 
-  const chartBgColor = isDarkMode ? "#23272f" : "#fff";
+  const chartBgColor = isDarkMode ? "#1c1c1c" : "#fff";
   const cardBgColor = isDarkMode ? "#1c1c1c" : "#fff";
   const fontColor = isDarkMode ? "#fff" : "#23272f";
 

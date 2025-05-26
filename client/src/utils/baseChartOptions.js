@@ -11,6 +11,16 @@ const baseOptions = (title, hasAxes = true, fontColor = "#23272f") => {
       x: { ticks: { color: fontColor }, grid: { color: "#eee" } },
       y: { ticks: { color: fontColor }, grid: { color: "#eee" } },
     };
+  } else if (title && title.toLowerCase().includes("apdex")) {
+    // Radar chart (Apdex/Availability/Error Rate)
+    options.scales = {
+      r: {
+        pointLabels: { color: fontColor },
+        angleLines: { color: fontColor },
+        grid: { color: "#eee" },
+        ticks: { color: fontColor },
+      },
+    };
   }
   return options;
 };
