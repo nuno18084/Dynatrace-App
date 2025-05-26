@@ -1,6 +1,6 @@
 import React from "react";
 
-function AlertsPanel({ entities }) {
+function AlertsPanel() {
   return null;
 }
 

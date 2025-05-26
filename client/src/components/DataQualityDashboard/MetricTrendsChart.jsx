@@ -1,6 +1,6 @@
 import React from "react";
 
-function MetricTrendsChart({ entities }) {
+function MetricTrendsChart() {
   return null;
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-function EntityQualityTable({ entities }) {
+function EntityQualityTable() {
   return null;
 }
 

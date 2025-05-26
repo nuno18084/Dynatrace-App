@@ -165,8 +165,8 @@ function EntitySummaryCards({ entities }) {
                   Missing:{" "}
                   {e.metrics
                     ? Object.entries(e.metrics)
-                        .filter(([k, v]) => v == null)
-                        .map(([k]) => k)
+                        .filter(([, v]) => v == null)
+                        .map(([key]) => key)
                         .join(", ")
                     : "all metrics"}
                 </li>

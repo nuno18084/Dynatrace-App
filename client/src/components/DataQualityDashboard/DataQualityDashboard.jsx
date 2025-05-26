@@ -22,6 +22,7 @@ function DataQualityDashboard() {
       .catch((err) => {
         setError("Failed to fetch data");
         setLoading(false);
+        console.log(err);
       });
   }, []);
 

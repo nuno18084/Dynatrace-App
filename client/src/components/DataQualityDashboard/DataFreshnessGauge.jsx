@@ -1,6 +1,6 @@
 import React from "react";
 
-function DataFreshnessGauge({ entities }) {
+function DataFreshnessGauge() {
   return null;
 }
 
