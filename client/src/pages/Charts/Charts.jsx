@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Charts.css";
 import {
-  Bar,
-  Doughnut,
-  Line,
-  PolarArea,
-  Pie,
-  Radar,
-  Scatter,
-  Bubble,
-} from "react-chartjs-2";
-import {
   Chart as ChartJS,
   BarElement,
   CategoryScale,
@@ -25,6 +15,7 @@ import {
   Filler,
 } from "chart.js";
 import { useTranslation } from "react-i18next";
+import ChartCard from "../../components/Chart/ChartCard";
 
 ChartJS.register(
   BarElement,
@@ -302,160 +293,94 @@ function Charts() {
     <div className="charts-page">
       <h1 className="title">{t("Charts")}</h1>
       <div className="charts-grid">
-        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
-          {chartData &&
-          chartData.datasets &&
-          chartData.datasets[0].data.length > 0 ? (
-            <Bar
-              data={chartData}
-              options={{
-                ...baseOptions(t("CPU Usage by Entity"), true),
-                plugins: {
-                  ...baseOptions(t("CPU Usage by Entity"), true).plugins,
-                  customCanvasBackgroundColor: { color: chartBgColor },
-                },
-              }}
-              plugins={[customCanvasBackgroundColor]}
-            />
-          ) : (
-            <div className="no-data">{t("No data available")}</div>
-          )}
-        </div>
-        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
-          {lineData &&
-          lineData.datasets &&
-          lineData.datasets[0].data.length > 0 ? (
-            <Line
-              data={lineData}
-              options={{
-                ...baseOptions(t("Memory Usage by Entity"), true),
-                plugins: {
-                  ...baseOptions(t("Memory Usage by Entity"), true).plugins,
-                  customCanvasBackgroundColor: { color: chartBgColor },
-                },
-              }}
-              plugins={[customCanvasBackgroundColor]}
-            />
-          ) : (
-            <div className="no-data">{t("No data available")}</div>
-          )}
-        </div>
-        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
-          {doughnutData &&
-          doughnutData.datasets &&
-          doughnutData.datasets[0].data.length > 0 ? (
-            <Doughnut
-              data={doughnutData}
-              options={{
-                ...baseOptions(t("Entity Type Distribution"), false),
-                plugins: {
-                  ...baseOptions(t("Entity Type Distribution"), false).plugins,
-                  customCanvasBackgroundColor: { color: chartBgColor },
-                },
-              }}
-              plugins={[customCanvasBackgroundColor]}
-            />
-          ) : (
-            <div className="no-data">{t("No data available")}</div>
-          )}
-        </div>
-        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
-          {pieData &&
-          pieData.datasets &&
-          pieData.datasets[0].data.length > 0 ? (
-            <Pie
-              data={pieData}
-              options={{
-                ...baseOptions(t("Environment Distribution"), false),
-                plugins: {
-                  ...baseOptions(t("Environment Distribution"), false).plugins,
-                  customCanvasBackgroundColor: { color: chartBgColor },
-                },
-              }}
-              plugins={[customCanvasBackgroundColor]}
-            />
-          ) : (
-            <div className="no-data">{t("No data available")}</div>
-          )}
-        </div>
-        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
-          {polarData &&
-          polarData.datasets &&
-          polarData.datasets[0].data.length > 0 ? (
-            <PolarArea
-              data={polarData}
-              options={{
-                ...baseOptions(t("Status Distribution"), false),
-                plugins: {
-                  ...baseOptions(t("Status Distribution"), false).plugins,
-                  customCanvasBackgroundColor: { color: chartBgColor },
-                },
-              }}
-              plugins={[customCanvasBackgroundColor]}
-            />
-          ) : (
-            <div className="no-data">{t("No data available")}</div>
-          )}
-        </div>
-        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
-          {radarData &&
-          radarData.datasets &&
-          radarData.datasets[0].data.length > 0 ? (
-            <Radar
-              data={radarData}
-              options={{
-                ...baseOptions(t("Apdex/Availability/Error Rate"), false),
-                plugins: {
-                  ...baseOptions(t("Apdex/Availability/Error Rate"), false)
-                    .plugins,
-                  customCanvasBackgroundColor: { color: chartBgColor },
-                },
-              }}
-              plugins={[customCanvasBackgroundColor]}
-            />
-          ) : (
-            <div className="no-data">{t("No data available")}</div>
-          )}
-        </div>
-        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
-          {scatterData &&
-          scatterData.datasets &&
-          scatterData.datasets[0].data.length > 0 ? (
-            <Scatter
-              data={scatterData}
-              options={{
-                ...baseOptions(t("CPU vs Memory Usage"), true),
-                plugins: {
-                  ...baseOptions(t("CPU vs Memory Usage"), true).plugins,
-                  customCanvasBackgroundColor: { color: chartBgColor },
-                },
-              }}
-              plugins={[customCanvasBackgroundColor]}
-            />
-          ) : (
-            <div className="no-data">{t("No data available")}</div>
-          )}
-        </div>
-        <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
-          {bubbleData &&
-          bubbleData.datasets &&
-          bubbleData.datasets[0].data.length > 0 ? (
-            <Bubble
-              data={bubbleData}
-              options={{
-                ...baseOptions(t("Requests/Error/Active Sessions"), true),
-                plugins: {
-                  ...baseOptions(t("Requests/Error/Active Sessions"), true)
-                    .plugins,
-                  customCanvasBackgroundColor: { color: chartBgColor },
-                },
-              }}
-              plugins={[customCanvasBackgroundColor]}
-            />
-          ) : (
-            <div className="no-data">{t("No data available")}</div>
-          )}
-        </div>
+        <ChartCard
+          type="Bar"
+          data={chartData}
+          title={t("CPU Usage by Entity")}
+          hasAxes={true}
+          cardBgColor={cardBgColor}
+          chartBgColor={chartBgColor}
+          t={t}
+          baseOptions={baseOptions}
+          customCanvasBackgroundColor={customCanvasBackgroundColor}
+        />
+        <ChartCard
+          type="Line"
+          data={lineData}
+          title={t("Memory Usage by Entity")}
+          hasAxes={true}
+          cardBgColor={cardBgColor}
+          chartBgColor={chartBgColor}
+          t={t}
+          baseOptions={baseOptions}
+          customCanvasBackgroundColor={customCanvasBackgroundColor}
+        />
+        <ChartCard
+          type="Doughnut"
+          data={doughnutData}
+          title={t("Entity Type Distribution")}
+          hasAxes={false}
+          cardBgColor={cardBgColor}
+          chartBgColor={chartBgColor}
+          t={t}
+          baseOptions={baseOptions}
+          customCanvasBackgroundColor={customCanvasBackgroundColor}
+        />
+        <ChartCard
+          type="Pie"
+          data={pieData}
+          title={t("Environment Distribution")}
+          hasAxes={false}
+          cardBgColor={cardBgColor}
+          chartBgColor={chartBgColor}
+          t={t}
+          baseOptions={baseOptions}
+          customCanvasBackgroundColor={customCanvasBackgroundColor}
+        />
+        <ChartCard
+          type="PolarArea"
+          data={polarData}
+          title={t("Status Distribution")}
+          hasAxes={false}
+          cardBgColor={cardBgColor}
+          chartBgColor={chartBgColor}
+          t={t}
+          baseOptions={baseOptions}
+          customCanvasBackgroundColor={customCanvasBackgroundColor}
+        />
+        <ChartCard
+          type="Radar"
+          data={radarData}
+          title={t("Apdex/Availability/Error Rate")}
+          hasAxes={false}
+          cardBgColor={cardBgColor}
+          chartBgColor={chartBgColor}
+          t={t}
+          baseOptions={baseOptions}
+          customCanvasBackgroundColor={customCanvasBackgroundColor}
+        />
+        <ChartCard
+          type="Scatter"
+          data={scatterData}
+          title={t("CPU vs Memory Usage")}
+          hasAxes={true}
+          cardBgColor={cardBgColor}
+          chartBgColor={chartBgColor}
+          t={t}
+          baseOptions={baseOptions}
+          customCanvasBackgroundColor={customCanvasBackgroundColor}
+        />
+        <ChartCard
+          type="Bubble"
+          data={bubbleData}
+          title={t("Requests/Error/Active Sessions")}
+          hasAxes={true}
+          cardBgColor={cardBgColor}
+          chartBgColor={chartBgColor}
+          t={t}
+          baseOptions={baseOptions}
+          customCanvasBackgroundColor={customCanvasBackgroundColor}
+        />
       </div>
     </div>
   );
