@@ -9,6 +9,7 @@
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 2rem;
+  text-align: left;
 }
 
 .error {

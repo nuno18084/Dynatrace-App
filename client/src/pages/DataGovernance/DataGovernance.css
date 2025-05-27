@@ -2,7 +2,7 @@
   background: var(--background-primary);
   color: var(--text-primary);
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -11,14 +11,14 @@
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 2rem;
-  text-align: center;
+  text-align: left;
 }
 
 .tabs {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
-  justify-content: center;
+  justify-content: flex-start;
   border-bottom: 2px solid var(--background-secondary);
   padding-bottom: 0.25rem;
 }
