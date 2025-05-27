@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import "./DataTable.css";
 import ExportActions from "../ExportAction/ExportActions";
 import SearchBar from "../SearchBar/SearchBar";
@@ -6,13 +6,7 @@ import { useTableSearch } from "../../Hooks/useTableSearch";
 import { useTableSelection } from "../../Hooks/useTableSelection";
 import { useCSVExport } from "../../Hooks/useCSVExport";
 
-const DataTable = ({
-  data = [],
-  selectedColumns = [],
-  onLoadMore,
-  hasMore,
-  loading,
-}) => {
+const DataTable = ({ data = [], selectedColumns = [] }) => {
   const { setSearchQuery, filteredData } = useTableSearch(
     data,
     selectedColumns
@@ -20,43 +14,8 @@ const DataTable = ({
   const { selectedRows, handleRowSelect, handleSelectAll, isSelected } =
     useTableSelection();
   const { handleExport } = useCSVExport();
-  const [isSearching, setIsSearching] = useState(false);
-
-  // Create refs for intersection observer
-  const loadingRef = useRef(null);
-  const observerRef = useRef(null);
-
-  useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: "150px", // Trigger a bit earlier before reaching bottom
-      threshold: 0,
-    };
-
-    const handleObserver = (entries) => {
-      const target = entries[0];
-      if (target.isIntersecting && hasMore && !loading && !isSearching) {
-        console.log("Near bottom, loading more data");
-        onLoadMore();
-      }
-    };
-
-    observerRef.current = new IntersectionObserver(handleObserver, options);
-
-    // Only observe if we have data and there's more to load
-    if (loadingRef.current && hasMore && !isSearching) {
-      observerRef.current.observe(loadingRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [hasMore, loading, onLoadMore, isSearching]);
 
   const handleSearch = (query) => {
-    setIsSearching(!!query);
     setSearchQuery(query);
   };
 
@@ -67,14 +26,6 @@ const DataTable = ({
   const handleExportAll = () => {
     handleExport(filteredData, selectedColumns, "all_data.csv");
   };
-
-  console.log("DataTable render:", {
-    dataLength: data.length,
-    filteredDataLength: filteredData.length,
-    hasMore,
-    isSearching,
-    loading,
-  });
 
   if (
     !data ||
@@ -194,12 +145,6 @@ const DataTable = ({
             ))}
           </tbody>
         </table>
-        {/* Invisible element for intersection observer */}
-        <div ref={loadingRef} style={{ height: "1px" }} />
-        {/* Only show loading indicator when actually loading */}
-        {loading && (
-          <div className="loading-indicator">Loading more data...</div>
-        )}
       </div>
       <ExportActions
         selectedRows={selectedRows}

@@ -6,6 +6,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import filtersReducer from "../src/store/filtersSlice";
 import dataReducer from "../src/store/dataSlice";
 import App from "../src/App";
+import { MemoryRouter } from "react-router-dom";
 
 // Create a test store with preloadedState for filters.columns and data
 const testStore = configureStore({
@@ -71,21 +72,16 @@ describe("App", () => {
   it("renders the Data Export page and sidebar navigation", async () => {
     render(
       <Provider store={testStore}>
-        <App />
+        <MemoryRouter initialEntries={["/data-export"]}>
+          <App />
+        </MemoryRouter>
       </Provider>
     );
-    let heading;
-    try {
-      heading = await screen.findByRole("heading", { name: /data export/i });
-      expect(heading).toBeInTheDocument();
-      // eslint-disable-next-line no-unused-vars
-    } catch (e) {
-      // Fallback: check for error or loading text
-      const error = screen.queryByText(/no data available/i);
-      const loading = screen.queryByText(/loading more data/i);
-      const initializing = screen.queryByText(/initializing/i);
-      expect(error || loading || initializing).not.toBeNull();
-    }
+    screen.debug();
+    const heading = await screen.findByRole("heading", {
+      name: /data export/i,
+    });
+    expect(heading).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /data export/i })
     ).toBeInTheDocument();
