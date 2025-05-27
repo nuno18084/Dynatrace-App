@@ -24,6 +24,8 @@
   position: relative;
   border-radius: 4px;
   background-color: var(--background-secondary);
+  scrollbar-color: var(--border-color) transparent;
+  scrollbar-width: thin;
 }
 
 /* Hide scrollbars by default for Chrome/Safari/Edge */
@@ -247,4 +249,9 @@ td div:last-child {
   border: 0;
   padding: 0;
   margin: -1px;
+}
+
+.table-wrapper::-webkit-scrollbar-corner {
+  background: transparent;
+  display: none;
 }

@@ -25,6 +25,13 @@
   padding-top: 0;
   padding-left: 0.2rem;
   margin-top: 1rem;
+  scrollbar-color: var(--border-color) transparent;
+  scrollbar-width: thin;
+}
+
+.sidebar-scrollable::-webkit-scrollbar-corner {
+  background: transparent;
+  display: none;
 }
 
 .sidebar-header {
