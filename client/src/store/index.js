@@ -1,8 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import filtersReducer from "./filtersSlice";
+import dataReducer from "./dataSlice";
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     filters: filtersReducer,
+    data: dataReducer,
   },
 });
+
+export default store;

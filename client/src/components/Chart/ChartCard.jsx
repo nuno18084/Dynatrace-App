@@ -42,8 +42,24 @@ function ChartCard({
     data.datasets[0].data &&
     data.datasets[0].data.length > 0;
 
+  // Determine chart size based on type
+  let chartStyle = {
+    backgroundColor: cardBgColor,
+    width: "100%",
+    minHeight: "70vh",
+    boxSizing: "border-box",
+    overflow: "auto",
+    padding: 24,
+    margin: "0 auto",
+  };
+  if (["Doughnut", "Pie", "PolarArea", "Radar"].includes(type)) {
+    chartStyle.maxWidth = 600;
+  } else {
+    chartStyle.maxWidth = 1400;
+  }
+
   return (
-    <div className="chart-item" style={{ backgroundColor: cardBgColor }}>
+    <div className="chart-item" style={chartStyle}>
       {hasData ? (
         <ChartComponent
           data={data}
@@ -52,6 +68,17 @@ function ChartCard({
             plugins: {
               ...baseOptions(title, hasAxes).plugins,
               customCanvasBackgroundColor: { color: chartBgColor },
+              title: {
+                ...baseOptions(title, hasAxes).plugins.title,
+                font: { size: 32 },
+              },
+              legend: {
+                ...baseOptions(title, hasAxes).plugins.legend,
+                labels: {
+                  ...baseOptions(title, hasAxes).plugins.legend.labels,
+                  font: { size: 22 },
+                },
+              },
             },
           }}
           plugins={[customCanvasBackgroundColor]}

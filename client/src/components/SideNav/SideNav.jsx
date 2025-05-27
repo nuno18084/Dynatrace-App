@@ -8,8 +8,8 @@ import ApplyButton from "../Button/Button";
 import ColumnSelector from "../SelectedList/SelectedList";
 import APISelector from "../SelectedList/SelectedList";
 import EnvSelector from "../SelectedList/SelectedList";
-import { useFilters } from "../../Hooks/useFilters";
-// import { downloadCSV } from "../../utils/downloadCSV";
+import { useSelector, useDispatch } from "react-redux";
+import { setColumns, setEnv, setApi, fetchData } from "../../store/dataSlice";
 import {
   FiHome,
   FiBarChart2,
@@ -27,7 +27,10 @@ import { useTranslation } from "react-i18next";
 function SideNav() {
   const { collapsed, toggleSidebar } = useSidebarCollapse(false);
   const { showAllColumns, toggleShowColumns } = useShowAllColumns();
-  const { filters, setEnv, setApi, setColumns } = useFilters();
+  const dispatch = useDispatch();
+  const { columns, env, api, headers } = useSelector(
+    (state) => state.data || {}
+  );
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -46,83 +49,62 @@ function SideNav() {
   // Log whenever filters change
   useEffect(() => {
     console.log("Current Redux State:", {
-      environments: filters.env,
-      apis: filters.api,
-      columns: filters.columns,
+      environments: env,
+      apis: api,
+      columns: columns,
     });
-  }, [filters]);
+  }, [env, api, columns]);
 
   const handleEnvSelect = (val) => {
     const envOptions = ["PROD", "PPD", "UAT", "IST"];
-    console.log("Environment Selection:", {
-      action: val,
-      currentSelection: filters.env,
-    });
-
+    let updated;
     if (val === "ALL_SELECT") {
-      console.log("Selecting all environments:", envOptions);
-      setEnv(envOptions);
+      updated = envOptions;
     } else if (val === "ALL_DESELECT") {
-      console.log("Deselecting all environments");
-      setEnv([]);
+      updated = [];
     } else {
-      const currentEnv = Array.isArray(filters.env)
-        ? filters.env
-        : [filters.env].filter(Boolean);
-      const updated = currentEnv.includes(val)
-        ? currentEnv.filter((env) => env !== val)
+      const currentEnv = Array.isArray(env) ? env : [env].filter(Boolean);
+      updated = currentEnv.includes(val)
+        ? currentEnv.filter((e) => e !== val)
         : [...currentEnv, val];
-      console.log("Updated environments:", updated);
-      setEnv(updated);
     }
+    dispatch(setEnv(updated));
   };
 
   const handleApiSelect = (val) => {
     const apiOptions = ["Entities", "V1", "V2"];
-    console.log("API Selection:", {
-      action: val,
-      currentSelection: filters.api,
-    });
-
+    let updated;
     if (val === "ALL_SELECT") {
-      console.log("Selecting all APIs:", apiOptions);
-      setApi(apiOptions);
+      updated = apiOptions;
     } else if (val === "ALL_DESELECT") {
-      console.log("Deselecting all APIs");
-      setApi([]);
+      updated = [];
     } else {
-      const currentApi = Array.isArray(filters.api)
-        ? filters.api
-        : [filters.api].filter(Boolean);
-      const updated = currentApi.includes(val)
-        ? currentApi.filter((api) => api !== val)
+      const currentApi = Array.isArray(api) ? api : [api].filter(Boolean);
+      updated = currentApi.includes(val)
+        ? currentApi.filter((a) => a !== val)
         : [...currentApi, val];
-      console.log("Updated APIs:", updated);
-      setApi(updated);
     }
+    dispatch(setApi(updated));
   };
 
   const handleColumnsSelect = (val, affectedHeaders) => {
-    console.log("Columns Selection:", {
-      action: val,
-      currentSelection: filters.columns,
-      affectedHeaders: affectedHeaders,
-    });
-
+    let updated;
     if (val === "ALL_SELECT") {
-      const toSelect = affectedHeaders || [];
-      console.log("Selecting all columns:", toSelect);
-      setColumns(toSelect);
+      updated = affectedHeaders || [];
     } else if (val === "ALL_DESELECT") {
-      console.log("Deselecting all columns");
-      setColumns([]);
+      updated = [];
     } else {
-      const updated = filters.columns.includes(val)
-        ? filters.columns.filter((c) => c !== val)
-        : [...filters.columns, val];
-      console.log("Updated columns:", updated);
-      setColumns(updated);
+      updated = columns.includes(val)
+        ? columns.filter((c) => c !== val)
+        : [...columns, val];
     }
+    dispatch(setColumns(updated));
+  };
+
+  const handleApply = () => {
+    console.log("Applying filters:", { env, columns, api });
+    dispatch(fetchData({ env, columns, apiList: api }));
+    toggleSidebar();
   };
 
   return (
@@ -156,11 +138,7 @@ function SideNav() {
 
         <EnvSelector
           headers={["PROD", "PPD", "UAT", "IST"]}
-          selectedColumns={
-            Array.isArray(filters.env)
-              ? filters.env
-              : [filters.env].filter(Boolean)
-          }
+          selectedColumns={Array.isArray(env) ? env : [env].filter(Boolean)}
           handleColumnSelect={handleEnvSelect}
           collapsed={collapsed}
           showAllColumns={true}
@@ -170,11 +148,7 @@ function SideNav() {
 
         <APISelector
           headers={["Entities", "V1", "V2"]}
-          selectedColumns={
-            Array.isArray(filters.api)
-              ? filters.api
-              : [filters.api].filter(Boolean)
-          }
+          selectedColumns={Array.isArray(api) ? api : [api].filter(Boolean)}
           handleColumnSelect={handleApiSelect}
           collapsed={collapsed}
           showAllColumns={true}
@@ -183,8 +157,8 @@ function SideNav() {
         />
 
         <ColumnSelector
-          headers={filters.columns || []}
-          selectedColumns={filters.columns || []}
+          headers={headers || []}
+          selectedColumns={columns || []}
           handleColumnSelect={handleColumnsSelect}
           collapsed={collapsed}
           showAllColumns={showAllColumns}
@@ -192,7 +166,7 @@ function SideNav() {
           className="columns-selector"
         />
 
-        {(filters.columns || []).length > 5 && !collapsed && (
+        {(columns || []).length > 5 && !collapsed && (
           <button className="toggle-columns-btn" onClick={toggleShowColumns}>
             {showAllColumns ? <FiChevronUp /> : <FiChevronDown />}
           </button>
@@ -203,7 +177,7 @@ function SideNav() {
           text="Apply"
           color="#029e7a"
           height="36px"
-          onClick={toggleSidebar}
+          onClick={handleApply}
         />
       </div>
     </div>

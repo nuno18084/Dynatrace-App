@@ -4,18 +4,32 @@ import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import filtersReducer from "../src/store/filtersSlice";
+import dataReducer from "../src/store/dataSlice";
 import App from "../src/App";
 
-// Create a test store with preloadedState for filters.columns
+// Create a test store with preloadedState for filters.columns and data
 const testStore = configureStore({
   reducer: {
     filters: filtersReducer,
+    data: dataReducer,
   },
   preloadedState: {
     filters: {
       env: [],
       api: [],
       columns: ["id", "displayName"], // Add columns your DataTable expects
+    },
+    data: {
+      columns: ["id", "displayName"],
+      env: [],
+      api: [],
+      headers: ["id", "displayName"],
+      entities: [{ id: 1, displayName: "Test Entity", metrics: {} }],
+      loading: false,
+      error: null,
+      currentPage: 1,
+      totalPages: 1,
+      hasMore: false,
     },
   },
 });
@@ -34,9 +48,16 @@ beforeAll(() => {
       };
     };
 
+  // Mock IntersectionObserver
+  globalThis.IntersectionObserver = class {
+    constructor() {}
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+
   // Mock fetch to always return a successful response with mock data
-  // eslint-disable-next-line no-undef
-  global.fetch = vi.fn(() =>
+  globalThis.fetch = vi.fn(() =>
     Promise.resolve({
       json: () =>
         Promise.resolve({
@@ -60,9 +81,10 @@ describe("App", () => {
       // eslint-disable-next-line no-unused-vars
     } catch (e) {
       // Fallback: check for error or loading text
-      const error = screen.queryByText(/failed to initialize data/i);
-      const loading = screen.queryByText(/initializing/i);
-      expect(error || loading).not.toBeNull();
+      const error = screen.queryByText(/no data available/i);
+      const loading = screen.queryByText(/loading more data/i);
+      const initializing = screen.queryByText(/initializing/i);
+      expect(error || loading || initializing).not.toBeNull();
     }
     expect(
       screen.getByRole("link", { name: /data export/i })

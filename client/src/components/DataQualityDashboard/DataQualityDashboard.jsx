@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import EntitySummaryCards from "../DataQuality/EntitySummary/EntitySummaryCards";
 import DataCoveragePie from "../DataQuality/Charts/DataCoveragePie";
 import MetricTrendsChart from "../DataQuality/Charts/MetricTrendsChart";
@@ -7,24 +8,9 @@ import EntityQualityTable from "../DataQuality/EntitySummary/EntityQualityTable"
 import DataFreshnessGauge from "../DataQuality/Charts/DataFreshnessGauge";
 
 function DataQualityDashboard() {
-  const [entities, setEntities] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setLoading(true);
-    fetch("http://127.0.0.1:5000/api/data?page=1&per_page=100")
-      .then((res) => res.json())
-      .then((data) => {
-        setEntities(data.entities || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError("Failed to fetch data");
-        setLoading(false);
-        console.log(err);
-      });
-  }, []);
+  const entities = useSelector((state) => state.data.entities);
+  const loading = useSelector((state) => state.data.loading);
+  const error = useSelector((state) => state.data.error);
 
   if (loading) return <div>Loading data...</div>;
   if (error) return <div style={{ color: "red" }}>{error}</div>;

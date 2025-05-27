@@ -44,7 +44,7 @@
   "IST": "Intégration",
   "Initializing...": "",
   "Joined": "Inscrit",
-  "LabelWithCount": "{{count}} {{label}}",
+  "LabelWithCount": "{{label}} ({{count}})",
   "LabelWithCount_many": "",
   "LabelWithCount_one": "",
   "LabelWithCount_other": "",

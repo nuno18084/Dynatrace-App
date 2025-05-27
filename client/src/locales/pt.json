@@ -44,7 +44,7 @@
   "IST": "Integração",
   "Initializing...": "",
   "Joined": "Entrou",
-  "LabelWithCount": "{{count}} {{label}}",
+  "LabelWithCount": "{{label}} ({{count}})",
   "LabelWithCount_many": "",
   "LabelWithCount_one": "",
   "LabelWithCount_other": "",

@@ -27,12 +27,12 @@ const baseOptions = (
   if (hasAxes) {
     options.scales = {
       x: {
-        title: { display: true, text: t("Entity") },
+        title: { display: true, text: t("Entity"), color: fontColor },
         ticks: { color: fontColor },
         grid: { color: "#eee" },
       },
       y: {
-        title: { display: true, text: t("Value") },
+        title: { display: true, text: t("Value"), color: fontColor },
         ticks: { color: fontColor },
         grid: { color: "#eee" },
       },
