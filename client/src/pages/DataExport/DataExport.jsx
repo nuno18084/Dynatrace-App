@@ -7,9 +7,9 @@ import { useFetchData } from "../../Hooks/useFetchData";
 import { useSelector, useDispatch } from "react-redux";
 import { setColumns } from "../../store/filtersSlice";
 import DataTable from "../../components/DataTable/DataTable";
-import "./Home.css";
+import "./DataExport.css";
 
-function Home() {
+function DataExport() {
   const { data, setData } = useData();
   const { loading, error, startLoading, stopLoading, setLoadingError } =
     useLoadingState(false);
@@ -107,7 +107,7 @@ function Home() {
     setLoadingError,
   ]);
 
-  console.log("Home render state:", {
+  console.log("DataExport render state:", {
     dataLength: data?.length || 0,
     loading,
     hasMore,
@@ -123,7 +123,7 @@ function Home() {
 
   return (
     <div className="home">
-      <h1 className="title">Dynatrace Data</h1>
+      <h1 className="title">Data Export</h1>
       <DataTable
         data={data || []}
         selectedColumns={selectedColumns || []}
@@ -135,4 +135,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default DataExport;

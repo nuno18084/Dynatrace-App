@@ -133,9 +133,9 @@ function SideNav() {
         </div>
 
         <nav className="sidebar-menu">
-          <NavLink to="/home" className="sidebar-link">
+          <NavLink to="/data-export" className="sidebar-link">
             <FiHome className="icon" />
-            <span className="link-text">Home</span>
+            <span className="link-text">Data Export</span>
           </NavLink>
           <NavLink to="/charts" className="sidebar-link">
             <FiBarChart2 className="icon" />

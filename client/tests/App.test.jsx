@@ -47,7 +47,7 @@ beforeAll(() => {
 });
 
 describe("App", () => {
-  it("renders the Home page and sidebar navigation", async () => {
+  it("renders the Data Export page and sidebar navigation", async () => {
     render(
       <Provider store={testStore}>
         <App />
@@ -55,7 +55,7 @@ describe("App", () => {
     );
     let heading;
     try {
-      heading = await screen.findByRole("heading", { name: /dynatrace data/i });
+      heading = await screen.findByRole("heading", { name: /data export/i });
       expect(heading).toBeInTheDocument();
       // eslint-disable-next-line no-unused-vars
     } catch (e) {
@@ -64,7 +64,9 @@ describe("App", () => {
       const loading = screen.queryByText(/initializing/i);
       expect(error || loading).not.toBeNull();
     }
-    expect(screen.getByRole("link", { name: /home/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /data export/i })
+    ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /charts/i })).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /data governance/i })
