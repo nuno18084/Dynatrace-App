@@ -1,6 +1,6 @@
 module.exports = {
-  input: ["src/**/*.{js,jsx,ts,tsx}"],
-  output: "./",
+  input: ["../**/*.{js,jsx,ts,tsx}"],
+  output: "../",
   options: {
     debug: false,
     removeUnusedKeys: false,
@@ -22,8 +22,8 @@ module.exports = {
     defaultLng: "en",
     defaultNs: "translation",
     resource: {
-      loadPath: "src/locales/{{lng}}.json",
-      savePath: "src/locales/{{lng}}.json",
+      loadPath: "./en.json",
+      savePath: "./{{lng}}.json",
     },
     keySeparator: false,
     nsSeparator: false,

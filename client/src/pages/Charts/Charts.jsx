@@ -20,7 +20,7 @@ import customCanvasBackgroundColor from "../../utils/customCanvasBackgroundColor
 import baseOptions from "../../utils/baseChartOptions";
 import useChartData from "../../Hooks/useChartData";
 import useDarkMode from "../../Hooks/useDarkMode";
-import i18n from "../../i18n";
+import i18n from "../../locales/i18n";
 
 ChartJS.register(
   BarElement,

@@ -3,7 +3,7 @@ import "./TopNav.css";
 import { FiUser, FiGlobe, FiSun, FiMoon } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import i18n from "../../i18n";
+import i18n from "../../locales/i18n";
 
 function TopNav() {
   const [isDarkTheme, setIsDarkTheme] = useState(true);
