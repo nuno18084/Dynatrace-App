@@ -22,6 +22,8 @@ const SearchBar = ({ onSearch }) => {
         <FiSearch className="search-icon" />
         <input
           type="text"
+          id="table-search"
+          name="table-search"
           placeholder="Search in table..."
           value={searchValue}
           onChange={handleChange}

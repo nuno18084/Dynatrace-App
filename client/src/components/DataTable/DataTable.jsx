@@ -99,11 +99,16 @@ const DataTable = ({
               <th>
                 <input
                   type="checkbox"
+                  id="select-all-rows"
+                  name="select-all-rows"
                   onChange={(e) =>
                     handleSelectAll(e.target.checked ? filteredData : [])
                   }
                   checked={selectedRows.length === filteredData.length}
                 />
+                <label htmlFor="select-all-rows" className="visually-hidden">
+                  Select all rows
+                </label>
               </th>
               {selectedColumns.map((col) => (
                 <th key={col}>{col}</th>
@@ -119,9 +124,17 @@ const DataTable = ({
                 <td>
                   <input
                     type="checkbox"
+                    id={`select-row-${item.entityId || index}`}
+                    name={`select-row-${item.entityId || index}`}
                     checked={isSelected(item.entityId)}
                     onChange={() => handleRowSelect(item)}
                   />
+                  <label
+                    htmlFor={`select-row-${item.entityId || index}`}
+                    className="visually-hidden"
+                  >
+                    Select row {item.entityId || index}
+                  </label>
                 </td>
                 {selectedColumns.map((col) => {
                   let value = item[col];
