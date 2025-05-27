@@ -38,6 +38,7 @@ function TopNav() {
             <div className="lang-menu">
               <button onClick={() => handleLangSelect("en")}>English</button>
               <button onClick={() => handleLangSelect("fr")}>Français</button>
+              <button onClick={() => handleLangSelect("pt")}>Português</button>
             </div>
           )}
         </div>
