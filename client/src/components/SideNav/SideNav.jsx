@@ -20,6 +20,7 @@ import {
   FiChevronDown,
   FiChevronUp,
   FiLogOut,
+  FiDownload,
 } from "react-icons/fi";
 
 function SideNav() {
@@ -142,7 +143,7 @@ function SideNav() {
             <span className="link-text">Charts</span>
           </NavLink>
           <NavLink to="/data-export" className="sidebar-link">
-            <FiHome className="icon" />
+            <FiDownload className="icon" />
             <span className="link-text">Data Export</span>
           </NavLink>
           <NavLink to="/contact" className="sidebar-link">
