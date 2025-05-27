@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import EntitySummaryCards from "./EntitySummaryCards";
-import DataCoveragePie from "./DataCoveragePie";
-import MetricTrendsChart from "./MetricTrendsChart";
-import AlertsPanel from "./AlertsPanel";
-import EntityQualityTable from "./EntityQualityTable";
-import DataFreshnessGauge from "./DataFreshnessGauge";
+import EntitySummaryCards from "../DataQuality/EntitySummary/EntitySummaryCards";
+import DataCoveragePie from "../DataQuality/Charts/DataCoveragePie";
+import MetricTrendsChart from "../DataQuality/Charts/MetricTrendsChart";
+import AlertsPanel from "../DataQuality/Alerts/AlertsPanel";
+import EntityQualityTable from "../DataQuality/EntitySummary/EntityQualityTable";
+import DataFreshnessGauge from "../DataQuality/Charts/DataFreshnessGauge";
 
 function DataQualityDashboard() {
   const [entities, setEntities] = useState([]);
