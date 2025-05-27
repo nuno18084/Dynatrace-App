@@ -133,17 +133,17 @@ function SideNav() {
         </div>
 
         <nav className="sidebar-menu">
-          <NavLink to="/data-export" className="sidebar-link">
-            <FiHome className="icon" />
-            <span className="link-text">Data Export</span>
+          <NavLink to="/data-governance" className="sidebar-link">
+            <FiDatabase className="icon" />
+            <span className="link-text">Data Governance</span>
           </NavLink>
           <NavLink to="/charts" className="sidebar-link">
             <FiBarChart2 className="icon" />
             <span className="link-text">Charts</span>
           </NavLink>
-          <NavLink to="/data-governance" className="sidebar-link">
-            <FiDatabase className="icon" />
-            <span className="link-text">Data Governance</span>
+          <NavLink to="/data-export" className="sidebar-link">
+            <FiHome className="icon" />
+            <span className="link-text">Data Export</span>
           </NavLink>
           <NavLink to="/contact" className="sidebar-link">
             <FiMail className="icon" />
