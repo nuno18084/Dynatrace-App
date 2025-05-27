@@ -255,3 +255,16 @@ td div:last-child {
   background: transparent;
   display: none;
 }
+
+.loading-table,
+.loading-table th,
+.loading-table td,
+.loading-table tr {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.loading-table thead {
+  display: none;
+}
