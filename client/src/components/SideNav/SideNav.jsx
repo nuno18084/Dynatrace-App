@@ -22,11 +22,13 @@ import {
   FiLogOut,
   FiDownload,
 } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 
 function SideNav() {
   const { collapsed, toggleSidebar } = useSidebarCollapse(false);
   const { showAllColumns, toggleShowColumns } = useShowAllColumns();
   const { filters, setEnv, setApi, setColumns } = useFilters();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const body = document.body;
@@ -136,19 +138,19 @@ function SideNav() {
         <nav className="sidebar-menu">
           <NavLink to="/data-governance" className="sidebar-link">
             <FiDatabase className="icon" />
-            <span className="link-text">Data Governance</span>
+            <span className="link-text">{t("Data Governance")}</span>
           </NavLink>
           <NavLink to="/charts" className="sidebar-link">
             <FiBarChart2 className="icon" />
-            <span className="link-text">Charts</span>
+            <span className="link-text">{t("Charts")}</span>
           </NavLink>
           <NavLink to="/data-export" className="sidebar-link">
             <FiDownload className="icon" />
-            <span className="link-text">Data Export</span>
+            <span className="link-text">{t("Data Export")}</span>
           </NavLink>
           <NavLink to="/contact" className="sidebar-link">
             <FiMail className="icon" />
-            <span className="link-text">Contact</span>
+            <span className="link-text">{t("Contact")}</span>
           </NavLink>
         </nav>
 
@@ -162,7 +164,7 @@ function SideNav() {
           handleColumnSelect={handleEnvSelect}
           collapsed={collapsed}
           showAllColumns={true}
-          title="Environment"
+          title={t("Environment")}
           className="env-selector"
         />
 
@@ -186,7 +188,7 @@ function SideNav() {
           handleColumnSelect={handleColumnsSelect}
           collapsed={collapsed}
           showAllColumns={showAllColumns}
-          title="Select Columns"
+          title={t("Select Columns")}
           className="columns-selector"
         />
 

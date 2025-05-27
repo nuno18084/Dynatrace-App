@@ -16,11 +16,14 @@ const useChartData = (t) => {
       .then((data) => {
         // Bar chart: CPU Usage by Entity
         const labels = data.entities.map((entity) => entity.displayName);
+        const translatedLabels = labels.map((label) => t(label));
         const cpuUsages = data.entities.map(
           (entity) => entity["metrics.cpu_usage"]
         );
         setChartData({
-          labels,
+          labels: translatedLabels.map((label, idx) =>
+            t("LabelWithCount", { label: label, count: cpuUsages[idx] })
+          ),
           datasets: [
             {
               label: t("CPU Usage (%)"),
@@ -36,8 +39,11 @@ const useChartData = (t) => {
         data.entities.forEach((entity) => {
           typeCounts[entity.type] = (typeCounts[entity.type] || 0) + 1;
         });
+        const translatedTypeLabels = Object.keys(typeCounts).map((label) =>
+          t("LabelWithCount", { label: t(label), count: typeCounts[label] })
+        );
         setDoughnutData({
-          labels: Object.keys(typeCounts),
+          labels: translatedTypeLabels,
           datasets: [
             {
               data: Object.values(typeCounts),
@@ -62,7 +68,7 @@ const useChartData = (t) => {
           (entity) => entity["metrics.memory_usage"]
         );
         setLineData({
-          labels,
+          labels: translatedLabels,
           datasets: [
             {
               label: t("Memory Usage (%)"),
@@ -79,8 +85,11 @@ const useChartData = (t) => {
         data.entities.forEach((entity) => {
           statusCounts[entity.status] = (statusCounts[entity.status] || 0) + 1;
         });
+        const translatedStatusLabels = Object.keys(statusCounts).map((label) =>
+          t("LabelWithCount", { label: t(label), count: statusCounts[label] })
+        );
         setPolarData({
-          labels: Object.keys(statusCounts),
+          labels: translatedStatusLabels,
           datasets: [
             {
               data: Object.values(statusCounts),
@@ -106,8 +115,11 @@ const useChartData = (t) => {
           const env = entity.tag_env || "Unknown";
           envCounts[env] = (envCounts[env] || 0) + 1;
         });
+        const translatedEnvLabels = Object.keys(envCounts).map((label) =>
+          t("LabelWithCount", { label: t(label), count: envCounts[label] })
+        );
         setPieData({
-          labels: Object.keys(envCounts),
+          labels: translatedEnvLabels,
           datasets: [
             {
               data: Object.values(envCounts),
@@ -138,7 +150,7 @@ const useChartData = (t) => {
           (entity) => entity["metrics.error_rate"]
         );
         setRadarData({
-          labels,
+          labels: translatedLabels,
           datasets: [
             {
               label: t("Apdex Score"),

@@ -1,7 +1,9 @@
 import "./Button.css";
 import "../../App.css";
+import { useTranslation } from "react-i18next";
 
-const Button = ({ text, color, height, onClick, style }) => {
+const Button = ({ text, color, height, onClick, style, children }) => {
+  const { t } = useTranslation();
   return (
     <button
       className="download-btn"
@@ -12,7 +14,11 @@ const Button = ({ text, color, height, onClick, style }) => {
         ...style,
       }}
     >
-      <span style={{ display: "inline-block" }}>{text}</span>
+      {children ? (
+        children
+      ) : (
+        <span style={{ display: "inline-block" }}>{t(text)}</span>
+      )}
     </button>
   );
 };

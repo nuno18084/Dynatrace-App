@@ -1,9 +1,11 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import "./Account.css";
 import { FiLogOut } from "react-icons/fi";
 import Button from "../../components/Button/Button";
 
 function Account() {
+  const { t } = useTranslation();
   // Mock user data (replace with real data as needed)
   const user = {
     name: "Jane Doe",
@@ -21,41 +23,31 @@ function Account() {
 
   return (
     <div className="account">
-      <h1 className="title">Account</h1>
+      <h1 className="title">{t("Account")}</h1>
       <div className="content">
-        <h2>Overview</h2>
+        <h2>{t("Overview")}</h2>
         <div className="profile-card">
-          <img src={user.avatar} alt="User Avatar" className="profile-avatar" />
+          <img
+            src={user.avatar}
+            alt={t("User Avatar")}
+            className="profile-avatar"
+          />
           <div className="profile-info">
             <div>
-              <strong>Name:</strong> {user.name}
+              <strong>{t("Name")}:</strong> {user.name}
             </div>
             <div>
-              <strong>Email:</strong> {user.email}
+              <strong>{t("Email")}:</strong> {user.email}
             </div>
             <div>
-              <strong>Role:</strong> {user.role}
+              <strong>{t("Role")}:</strong> {t(user.role)}
             </div>
             <div>
-              <strong>Joined:</strong> {user.joined}
+              <strong>{t("Joined")}:</strong> {user.joined}
             </div>
           </div>
         </div>
         <Button
-          text={
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "0.5rem",
-              }}
-            >
-              <FiLogOut
-                style={{ fontSize: "1.0rem", verticalAlign: "middle" }}
-              />{" "}
-              Sign Out
-            </span>
-          }
           color="#f87171"
           height="auto"
           onClick={handleSignOut}
@@ -75,7 +67,10 @@ function Account() {
             boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
             transition: "background 0.2s",
           }}
-        />
+        >
+          <FiLogOut style={{ fontSize: "1.0rem", verticalAlign: "middle" }} />{" "}
+          {t("Sign Out")}
+        </Button>
       </div>
     </div>
   );

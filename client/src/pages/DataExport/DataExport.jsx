@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState, useCallback } from "react";
 import useData from "../../Hooks/useData";
 import useLoadingState from "../../Hooks/useLoadingState";
@@ -10,6 +11,7 @@ import DataTable from "../../components/DataTable/DataTable";
 import "./DataExport.css";
 
 function DataExport() {
+  const { t } = useTranslation();
   const { data, setData } = useData();
   const { loading, error, startLoading, stopLoading, setLoadingError } =
     useLoadingState(false);
@@ -47,15 +49,15 @@ function DataExport() {
           setIsInitialized(true);
           stopLoading();
         } else {
-          setLoadingError("Failed to initialize data");
+          setLoadingError(t("Failed to initialize data"));
         }
       } catch (error) {
         console.error("Error initializing data:", error);
-        setLoadingError(error?.message || "Failed to load initial data");
+        setLoadingError(error?.message || t("Failed to load initial data"));
       }
     };
     initializeFetch();
-  }, [fetchData, isInitialized, startLoading, stopLoading, setLoadingError]);
+  }, [fetchData, isInitialized, startLoading, stopLoading, setLoadingError, t]);
 
   const handleLoadMore = useCallback(async () => {
     if (loading || !hasMore) {
@@ -89,11 +91,11 @@ function DataExport() {
         setTotalPages(result.totalPages);
         stopLoading();
       } else {
-        setLoadingError("Failed to load more data");
+        setLoadingError(t("Failed to load more data"));
       }
     } catch (error) {
       console.error("Error loading more data:", error);
-      setLoadingError(error?.message || "Failed to load more data");
+      setLoadingError(error?.message || t("Failed to load more data"));
     }
   }, [
     currentPage,
@@ -105,6 +107,7 @@ function DataExport() {
     startLoading,
     stopLoading,
     setLoadingError,
+    t,
   ]);
 
   console.log("DataExport render state:", {
@@ -119,11 +122,11 @@ function DataExport() {
 
   if (error) return <div className="error">{error}</div>;
   if (!isInitialized || !data || !selectedColumns)
-    return <div className="loading">Initializing...</div>;
+    return <div className="loading">{t("Initializing...")}</div>;
 
   return (
     <div className="home">
-      <h1 className="title">Data Export</h1>
+      <h1 className="title">{t("Data Export")}</h1>
       <DataTable
         data={data || []}
         selectedColumns={selectedColumns || []}

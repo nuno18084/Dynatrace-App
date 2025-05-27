@@ -20,6 +20,7 @@ import customCanvasBackgroundColor from "../../utils/customCanvasBackgroundColor
 import baseOptions from "../../utils/baseChartOptions";
 import useChartData from "../../Hooks/useChartData";
 import useDarkMode from "../../Hooks/useDarkMode";
+import i18n from "../../i18n";
 
 ChartJS.register(
   BarElement,
@@ -54,6 +55,7 @@ function Charts() {
       <h1 className="title">{t("Charts")}</h1>
       <div className="charts-grid">
         <ChartCard
+          key={i18n.language + "-bar"}
           type="Bar"
           data={chartData}
           title={t("CPU Usage by Entity")}
@@ -62,11 +64,12 @@ function Charts() {
           chartBgColor={chartBgColor}
           t={t}
           baseOptions={(title, hasAxes) =>
-            baseOptions(title, hasAxes, fontColor)
+            baseOptions(title, hasAxes, t, fontColor)
           }
           customCanvasBackgroundColor={customCanvasBackgroundColor}
         />
         <ChartCard
+          key={i18n.language + "-line"}
           type="Line"
           data={lineData}
           title={t("Memory Usage by Entity")}
@@ -75,11 +78,12 @@ function Charts() {
           chartBgColor={chartBgColor}
           t={t}
           baseOptions={(title, hasAxes) =>
-            baseOptions(title, hasAxes, fontColor)
+            baseOptions(title, hasAxes, t, fontColor)
           }
           customCanvasBackgroundColor={customCanvasBackgroundColor}
         />
         <ChartCard
+          key={i18n.language + "-doughnut"}
           type="Doughnut"
           data={doughnutData}
           title={t("Entity Type Distribution")}
@@ -88,11 +92,12 @@ function Charts() {
           chartBgColor={chartBgColor}
           t={t}
           baseOptions={(title, hasAxes) =>
-            baseOptions(title, hasAxes, fontColor)
+            baseOptions(title, hasAxes, t, fontColor)
           }
           customCanvasBackgroundColor={customCanvasBackgroundColor}
         />
         <ChartCard
+          key={i18n.language + "-pie"}
           type="Pie"
           data={pieData}
           title={t("Environment Distribution")}
@@ -101,11 +106,12 @@ function Charts() {
           chartBgColor={chartBgColor}
           t={t}
           baseOptions={(title, hasAxes) =>
-            baseOptions(title, hasAxes, fontColor)
+            baseOptions(title, hasAxes, t, fontColor)
           }
           customCanvasBackgroundColor={customCanvasBackgroundColor}
         />
         <ChartCard
+          key={i18n.language + "-polar"}
           type="PolarArea"
           data={polarData}
           title={t("Status Distribution")}
@@ -114,11 +120,12 @@ function Charts() {
           chartBgColor={chartBgColor}
           t={t}
           baseOptions={(title, hasAxes) =>
-            baseOptions(title, hasAxes, fontColor)
+            baseOptions(title, hasAxes, t, fontColor)
           }
           customCanvasBackgroundColor={customCanvasBackgroundColor}
         />
         <ChartCard
+          key={i18n.language + "-radar"}
           type="Radar"
           data={radarData}
           title={t("Apdex/Availability/Error Rate")}
@@ -127,11 +134,12 @@ function Charts() {
           chartBgColor={chartBgColor}
           t={t}
           baseOptions={(title, hasAxes) =>
-            baseOptions(title, hasAxes, fontColor)
+            baseOptions(title, hasAxes, t, fontColor)
           }
           customCanvasBackgroundColor={customCanvasBackgroundColor}
         />
         <ChartCard
+          key={i18n.language + "-scatter"}
           type="Scatter"
           data={scatterData}
           title={t("CPU vs Memory Usage")}
@@ -140,11 +148,12 @@ function Charts() {
           chartBgColor={chartBgColor}
           t={t}
           baseOptions={(title, hasAxes) =>
-            baseOptions(title, hasAxes, fontColor)
+            baseOptions(title, hasAxes, t, fontColor)
           }
           customCanvasBackgroundColor={customCanvasBackgroundColor}
         />
         <ChartCard
+          key={i18n.language + "-bubble"}
           type="Bubble"
           data={bubbleData}
           title={t("Requests/Error/Active Sessions")}
@@ -153,7 +162,7 @@ function Charts() {
           chartBgColor={chartBgColor}
           t={t}
           baseOptions={(title, hasAxes) =>
-            baseOptions(title, hasAxes, fontColor)
+            baseOptions(title, hasAxes, t, fontColor)
           }
           customCanvasBackgroundColor={customCanvasBackgroundColor}
         />

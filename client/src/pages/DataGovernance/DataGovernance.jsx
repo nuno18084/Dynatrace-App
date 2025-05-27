@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./DataGovernance.css";
 import useDarkMode from "../../Hooks/useDarkMode";
 import DataQualityDashboard from "../../components/DataQualityDashboard/DataQualityDashboard";
@@ -16,18 +17,19 @@ const TABS = [
 function DataGovernance() {
   const [tab, setTab] = useState("quality");
   useDarkMode(); // Just to trigger theme, don't need values here
+  const { t } = useTranslation();
 
   return (
     <div className="data-governance-page">
-      <h1 className="title">Data Governance</h1>
+      <h1 className="title">{t("Data Governance")}</h1>
       <div className="tabs">
-        {TABS.map((t) => (
+        {TABS.map((tObj) => (
           <button
-            key={t.key}
-            className={tab === t.key ? "tab active" : "tab"}
-            onClick={() => setTab(t.key)}
+            key={tObj.key}
+            className={tab === tObj.key ? "tab active" : "tab"}
+            onClick={() => setTab(tObj.key)}
           >
-            {t.label}
+            {t(tObj.label)}
           </button>
         ))}
       </div>

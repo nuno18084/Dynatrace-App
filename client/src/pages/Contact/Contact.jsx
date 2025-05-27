@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./Contact.css";
 
 function Contact() {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,13 +34,14 @@ function Contact() {
 
   return (
     <div className="contact">
-      <h1 className="title">Contact Us</h1>
+      <h1 className="title">{t("Contact Us")}</h1>
       <div className="contact-content">
         <div className="contact-info">
-          <h2>Get in Touch</h2>
+          <h2>{t("Get in Touch")}</h2>
           <p>
-            Have questions about our data visualization services? We're here to
-            help!
+            {t(
+              "Have questions about our data visualization services? We're here to help!"
+            )}
           </p>
           <div className="contact-details">
             <div className="contact-item">
@@ -56,53 +59,46 @@ function Contact() {
           </div>
         </div>
         <form className="contact-form" onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="subject">Subject</label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="message">Message</label>
-            <textarea
-              id="message"
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              rows="5"
-            ></textarea>
-          </div>
-          <button type="submit" className="submit-button">
-            Send Message
-          </button>
+          <label htmlFor="name">{t("Name")}</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder={t("Your Name")}
+            required
+          />
+          <label htmlFor="email">{t("Email")}</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder={t("Your Email")}
+            required
+          />
+          <label htmlFor="subject">{t("Subject")}</label>
+          <input
+            id="subject"
+            name="subject"
+            type="text"
+            value={formData.subject}
+            onChange={handleChange}
+            placeholder={t("Subject")}
+            required
+          />
+          <label htmlFor="message">{t("Message")}</label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
+            placeholder={t("Your Message")}
+            required
+          />
+          <button type="submit">{t("Send Message")}</button>
         </form>
       </div>
     </div>

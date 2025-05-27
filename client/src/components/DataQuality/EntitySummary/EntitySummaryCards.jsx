@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import CountUp from "react-countup";
 import {
   FaServer,
@@ -55,6 +56,7 @@ function getWarningEntities(entities, type) {
 }
 
 function EntitySummaryCards({ entities }) {
+  const { t } = useTranslation();
   const [modalOpen, setModalOpen] = React.useState(false);
   const [modalType, setModalType] = React.useState(null); // { entityType, metricType }
   const [modalEntities, setModalEntities] = React.useState([]);
@@ -89,17 +91,17 @@ function EntitySummaryCards({ entities }) {
           return (
             <div className="entity-card" key={type.key}>
               <div className="entity-icon">{type.icon}</div>
-              <div className="entity-label">{type.label}</div>
+              <div className="entity-label">{t(type.label)}</div>
               <div className="entity-count">
                 <span>
                   <CountUp end={total} duration={1} />
-                  &nbsp;<span className="entity-count-label">Total</span>
+                  &nbsp;<span className="entity-count-label">{t("Total")}</span>
                 </span>
               </div>
               <div
                 className="entity-metric entity-missing clickable"
                 onClick={() => handleOpenModal(type.key, "missing")}
-                title="Click to see details"
+                title={t("Click to see details")}
                 style={{ cursor: "pointer" }}
               >
                 <FaExclamationTriangle
@@ -108,13 +110,13 @@ function EntitySummaryCards({ entities }) {
                 />
                 <span>
                   <CountUp end={missingMetrics} duration={1} />
-                  &nbsp;missing
+                  &nbsp;{t("missing")}
                 </span>
               </div>
               <div
                 className="entity-metric entity-warning clickable"
                 onClick={() => handleOpenModal(type.key, "warning")}
-                title="Click to see details"
+                title={t("Click to see details")}
                 style={{ cursor: "pointer" }}
               >
                 <FaExclamationTriangle
@@ -123,7 +125,7 @@ function EntitySummaryCards({ entities }) {
                 />
                 <span>
                   <CountUp end={warningOrError} duration={1} />
-                  &nbsp;warning/error
+                  &nbsp;{t("warning/error")}
                 </span>
               </div>
             </div>
@@ -151,14 +153,13 @@ function EntitySummaryCards({ entities }) {
           }}
         >
           {modalType &&
-            `${
+            `${t(
               ENTITY_TYPES.find((t) => t.key === modalType.entityType)?.label ||
-              "Entities"
-            } - ${
-              modalType.metricType === "missing"
-                ? "Missing Metrics"
-                : "Warning/Error"
-            }`}
+                "Entities"
+            )} - ` +
+              (modalType.metricType === "missing"
+                ? t("Missing Metrics")
+                : t("Warning/Error"))}
           <IconButton
             aria-label="close"
             onClick={handleCloseModal}
@@ -184,19 +185,19 @@ function EntitySummaryCards({ entities }) {
                   key={e.id || e.displayName || idx}
                   style={{ marginBottom: 12 }}
                 >
-                  <strong>{e.displayName || e.id || "(no name)"}</strong>
+                  <strong>{e.displayName || e.id || t("(no name)")}</strong>
                   <br />
-                  Missing:{" "}
+                  {t("Missing")}:{" "}
                   {e.metrics
                     ? Object.entries(e.metrics)
                         .filter(([, v]) => v == null)
                         .map(([key]) => key)
                         .join(", ")
-                    : "all metrics"}
+                    : t("all metrics")}
                 </li>
               ))}
               {modalEntities.length === 0 && (
-                <li>No entities with missing metrics.</li>
+                <li>{t("No entities with missing metrics.")}</li>
               )}
             </ul>
           )}
@@ -207,13 +208,13 @@ function EntitySummaryCards({ entities }) {
                   key={e.id || e.displayName || idx}
                   style={{ marginBottom: 12 }}
                 >
-                  <strong>{e.displayName || e.id || "(no name)"}</strong>
+                  <strong>{e.displayName || e.id || t("(no name)")}</strong>
                   <br />
-                  Status: {e.status || "Unknown"}
+                  {t("Status")}: {e.status}
                 </li>
               ))}
               {modalEntities.length === 0 && (
-                <li>No entities in warning/error state.</li>
+                <li>{t("No entities in warning/error state.")}</li>
               )}
             </ul>
           )}

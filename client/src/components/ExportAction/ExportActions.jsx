@@ -1,8 +1,10 @@
 import React from "react";
 import { FiCheckSquare, FiGrid } from "react-icons/fi";
 import "./ExportActions.css";
+import { useTranslation } from "react-i18next";
 
 const ExportActions = ({ selectedRows, onExportSelected, onExportAll }) => {
+  const { t } = useTranslation();
   return (
     <div className="export-actions">
       <button
@@ -11,20 +13,20 @@ const ExportActions = ({ selectedRows, onExportSelected, onExportAll }) => {
         disabled={!selectedRows.length}
         title={
           selectedRows.length
-            ? `Export ${selectedRows.length} selected rows`
-            : "Select rows to export"
+            ? t("Export Selected")
+            : t("Select rows to export")
         }
       >
         <FiCheckSquare className="icon" />
-        Export Selected
+        {t("Export Selected")}
       </button>
       <button
         className="export-button"
         onClick={onExportAll}
-        title="Export all visible rows"
+        title={t("Export all visible rows")}
       >
         <FiGrid className="icon" />
-        Export All
+        {t("Export All")}
       </button>
     </div>
   );
