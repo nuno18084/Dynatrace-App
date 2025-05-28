@@ -24,6 +24,8 @@ import i18n from "../../locales/i18n";
 import { useSelector } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Button from "../../components/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(
   BarElement,
@@ -118,7 +120,18 @@ function Charts() {
   const totalPages = chartConfigs.length;
   const currentChart = chartConfigs[page];
 
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
   const handlePageChange = (event, value) => setPage(value - 1);
+
+  const handleGoToExport = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/data-export");
+    }, 700);
+  };
 
   // Custom theme for Pagination
   const paginationTheme = createTheme({
@@ -165,9 +178,26 @@ function Charts() {
         width: "100%",
       }}
     >
-      <h1 className="title">{t("Charts")}</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          maxWidth: 1400,
+          marginBottom: 16,
+        }}
+      >
+        <h1 className="title">{t("Charts")}</h1>
+        <Button
+          text="Data Export"
+          color="#029e7a"
+          onClick={handleGoToExport}
+          loading={loading}
+        />
+      </div>
       <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
-        <div style={{ width: "100%", maxWidth: 1200 }}>
+        <div style={{ width: "100%", maxWidth: 1400 }}>
           <ChartCard
             key={currentChart.key}
             type={currentChart.type}

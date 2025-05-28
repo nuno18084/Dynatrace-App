@@ -6,9 +6,16 @@
   padding: 1.5rem 1rem;
   border-radius: 1rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-  min-height: 320px;
+  min-height: 0;
   min-width: 0;
   transition: background 0.2s;
+  height: 600px !important;
+  max-height: 600px !important;
+}
+
+.chart-item canvas {
+  height: 550px !important;
+  max-height: 550px !important;
 }
 
 .no-data {

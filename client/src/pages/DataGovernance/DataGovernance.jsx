@@ -6,6 +6,8 @@ import DataQualityDashboard from "../../components/DataQualityDashboard/DataQual
 import AccessControlsTable from "../../components/AccessControlsTable/AccessControlsTable";
 import AuditLogsTable from "../../components/AuditLogsTable/AuditLogsTable";
 import RetentionPolicyEditor from "../../components/RetentionPolicyEditor/RetentionPolicyEditor";
+import Button from "../../components/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 const TABS = [
   { key: "quality", label: "Data Quality" },
@@ -18,10 +20,34 @@ function DataGovernance() {
   const [tab, setTab] = useState("quality");
   useDarkMode(); // Just to trigger theme, don't need values here
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleGoToCharts = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/charts");
+    }, 700);
+  };
 
   return (
     <div className="data-governance-page">
-      <h1 className="title">{t("Data Governance")}</h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h1 className="title">{t("Data Governance")}</h1>
+        <Button
+          text="Charts"
+          color="#029e7a"
+          onClick={handleGoToCharts}
+          loading={loading}
+        />
+      </div>
       <div className="tabs">
         {TABS.map((tObj) => (
           <button

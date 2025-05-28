@@ -46,7 +46,7 @@ function ChartCard({
   let chartStyle = {
     backgroundColor: cardBgColor,
     width: "100%",
-    minHeight: "70vh",
+    minHeight: "280px",
     boxSizing: "border-box",
     overflow: "auto",
     padding: 24,
@@ -63,6 +63,7 @@ function ChartCard({
       {hasData ? (
         <ChartComponent
           data={data}
+          height={300}
           options={{
             ...baseOptions(title, hasAxes),
             plugins: {
