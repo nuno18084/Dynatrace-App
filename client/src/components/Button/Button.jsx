@@ -1,8 +1,18 @@
 import "./Button.css";
 import "../../App.css";
 import { useTranslation } from "react-i18next";
+import { FiCheck } from "react-icons/fi";
 
-const Button = ({ text, color, height, onClick, style, children, loading }) => {
+const Button = ({
+  text,
+  color,
+  height,
+  onClick,
+  style,
+  children,
+  loading,
+  tick,
+}) => {
   const { t } = useTranslation();
   return (
     <button
@@ -46,6 +56,15 @@ const Button = ({ text, color, height, onClick, style, children, loading }) => {
               animation: "spin 1s linear infinite",
               display: "inline-block",
               boxSizing: "border-box",
+              verticalAlign: "middle",
+            }}
+          />
+        ) : tick ? (
+          <FiCheck
+            style={{
+              fontSize: 20,
+              color: "white",
+              display: "inline-block",
               verticalAlign: "middle",
             }}
           />

@@ -21,6 +21,7 @@ import {
   FiChevronUp,
   FiLogOut,
   FiDownload,
+  FiCheck,
 } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 
@@ -178,7 +179,10 @@ function SideNav() {
           color="#029e7a"
           height="36px"
           onClick={handleApply}
-        />
+          tick
+        >
+          {t("Apply")}
+        </ApplyButton>
       </div>
     </div>
   );
